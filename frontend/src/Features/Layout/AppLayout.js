@@ -46,7 +46,7 @@ const AppLayout = ({ children }) => {
     };
 
     return (
-        <Box>
+        <Box sx={{background: "rgb(249, 250, 251)"}}>
             <AppBar position="static">
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
@@ -168,7 +168,7 @@ const AppLayout = ({ children }) => {
                     </Toolbar>
                 </Container>
             </AppBar>
-            <Container>
+            <Container sx={{mt:2, background: "rgb(249, 250, 251)"}}>
                 {children}
             </Container>
         </Box>
