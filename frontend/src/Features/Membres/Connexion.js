@@ -6,8 +6,8 @@ import LoginForm from "./Components/LoginForm";
 import AppLayout from "../Layout/AppLayout";
 
 //////////////////////////////////
-const RootStyle = styled("div")({
-    background: "rgb(249, 250, 251)",
+const RootStyle = styled(Box)({
+    background: "#EBF1F1",
     height: "85vh",
     display: "grid",
     placeItems: "center",
@@ -46,7 +46,7 @@ const fadeInUp = {
 const Connexion = () => {
     return (
         <AppLayout>
-            <RootStyle>
+            <RootStyle sx={{ml:0}}>
                 <Container maxWidth="sm">
                     <ContentStyle>
                         <HeadingStyle {...fadeInUp}>
