@@ -62,7 +62,7 @@ const AppLayout = ({ children }) => {
         navigate("/");
         break;
       case "Profil":
-        navigate("compte/1");
+        navigate("/userProfil/1");
         break;
       default:
         navigate("/");

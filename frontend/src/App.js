@@ -11,6 +11,7 @@ import MembreRecherche from "./Features/Membres/MembreRecherche";
 import TableauDeBord from "./Features/Users/TableauDeBord";
 import UserCompte from "./Features/Users/UserCompte";
 import UserDetail from "./Features/Users/UserDetail";
+import UserProfil from "./Features/Users/UserProfil";
 
 const App = () => {
   const routes = [
@@ -24,6 +25,8 @@ const App = () => {
     { link: "/compte/:id", element: <UserCompte /> },
     { link: "/tableauDeBord", element: <TableauDeBord /> },
     { link: "/userDetail/:id", element: <UserDetail /> },
+
+    { link: "/userProfil/:id", element: <UserProfil /> },
   ];
 
   const routesMembre = [
