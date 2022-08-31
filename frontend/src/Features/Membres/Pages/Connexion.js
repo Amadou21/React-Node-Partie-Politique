@@ -2,14 +2,13 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { Container, Typography, Link, Box } from "@mui/material";
 import styled from "@emotion/styled";
-import SignupForm from "./Components/SignupForm";
-import { motion } from "framer-motion";
-import AppLayout from "../Layout/AppLayout";
+import LoginForm from "../Components/LoginForm";
+import AppLayout from "../../Layout/AppLayout";
 
 //////////////////////////////////
-const RootStyle = styled("div")({
+const RootStyle = styled(Box)({
     background: "#EBF1F1",
-    height: "83vh",
+    height: "85vh",
     display: "grid",
     placeItems: "center",
 });
@@ -18,7 +17,7 @@ const HeadingStyle = styled(Box)({
     textAlign: "center",
 });
 
-const ContentStyle = styled(Box)({
+const ContentStyle = styled("div")({
     maxWidth: 480,
     padding: 25,
     margin: "auto",
@@ -31,7 +30,7 @@ const ContentStyle = styled(Box)({
 let easing = [0.6, -0.05, 0.01, 0.99];
 const fadeInUp = {
     initial: {
-        y: 40,
+        y: 60,
         opacity: 0,
         transition: { duration: 0.6, ease: easing },
     },
@@ -44,33 +43,28 @@ const fadeInUp = {
         },
     },
 };
-
-const Inscription = ({ setAuth }) => {
+const Connexion = () => {
+    
     return (
         <AppLayout>
-            <RootStyle>
+            <RootStyle sx={{ ml: 0 }}>
                 <Container maxWidth="sm">
                     <ContentStyle>
-                        <HeadingStyle component={motion.div} {...fadeInUp}>
-
+                        <HeadingStyle {...fadeInUp}>
                             <Typography variant='h5' sx={{ color: "text.secondary", mb: 5 }}>
-                                Entrez vos coordonnées
+                                Connectez vous a votre compte
                             </Typography>
                         </HeadingStyle>
-                        <Box component={motion.div} {...fadeInUp}>
-                        </Box>
-                        <SignupForm setAuth={setAuth} />
-
+                        <LoginForm />
                         <Typography
-                            component={motion.p}
                             {...fadeInUp}
                             variant="body2"
                             align="center"
                             sx={{ mt: 3 }}
                         >
-                            Vous avez deja un compte?{" "}
-                            <Link variant="subtitle2" component={RouterLink} to="/connexion">
-                                Connectez vous
+                            Vous n'avez pas de compte?{" "}
+                            <Link variant="subtitle2" component={RouterLink} to="/inscription">
+                                Inscrivez vous
                             </Link>
                         </Typography>
                     </ContentStyle>
@@ -80,4 +74,4 @@ const Inscription = ({ setAuth }) => {
     );
 };
 
-export default Inscription;
+export default Connexion;

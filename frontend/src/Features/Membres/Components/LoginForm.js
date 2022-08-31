@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import { Form, FormikProvider, useFormik } from "formik";
+import AuthContext from "../../../Context/Connexion.context";
 import * as Yup from "yup";
 import { Box, Checkbox, FormControlLabel, IconButton, InputAdornment, Link, Stack, TextField, Button } from "@mui/material";
 import { motion } from "framer-motion";
@@ -10,12 +11,18 @@ import VisibilityOffICon from '@mui/icons-material/VisibilityOff';
 let easing = [0.6, -0.05, 0.01, 0.99];
 const animate = { opacity: 1, y: 0, transition: { duration: 0.6, ease: easing, delay: 0.16, }, };
 
-const LoginForm = ({ setAuth }) => {
+const LoginForm = () => {
+    const { setAuth } = useContext(AuthContext);
+    
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
 
     const [showPassword, setShowPassword] = useState(false);
+
+    const setCookieFunction = (value) => {
+        localStorage.setLogin('login', value)
+    }
 
     const LoginSchema = Yup.object().shape({
         email: Yup.string()
@@ -31,11 +38,11 @@ const LoginForm = ({ setAuth }) => {
             remember: true,
         },
         validationSchema: LoginSchema,
-        onSubmit: () => {
+        onSubmit: (login) => {
             console.log("submitting...");
             setTimeout(() => {
                 console.log("submited!!");
-                setAuth(true);
+                setCookieFunction(login.email);
                 navigate(from, { replace: true });
             }, 2000);
         },

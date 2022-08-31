@@ -1,15 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Accueil from './Features/Accueil/Accueil'
 import Actualites from './Features/Accueil/Actualites';
 import Projet from './Features/Accueil/Projet';
-import Connexion from './Features/Membres/Connexion';
-import Inscription from './Features/Membres/Inscription';
-import MembreActualite from './Features/Membres/MembreActualite';
-import MembreRecherche from './Features/Membres/MembreRecherche';
+import Connexion from './Features/Membres/Pages/Connexion';
+import Inscription from './Features/Membres/Pages/Inscription';
+import MembreActualite from './Features/Membres/Pages/MembreActualite';
+import MembreRecherche from './Features/Membres/Pages/MembreRecherche';
 
 const App = () => {
+
+  const [auth, setAuth] = useState(false);
 
   const routes = [
     { link: '/', element: <Accueil /> },
@@ -34,7 +36,7 @@ const App = () => {
         ))}
 
         {routesMembre.map(route => (
-          <Route key={route.link} path={route.link} element={route.element} />
+          <Route key={route.link} path={route.link} element={ auth ? <MembreActualite /> : route.element} />
         ))}
 
       </Routes>
