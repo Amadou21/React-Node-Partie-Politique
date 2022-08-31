@@ -1,5 +1,5 @@
 import React from 'react';
-import AppLayout from '../Layout/AppLayout';
+import AppLayout from '../../Layout/AppLayout';
 import { Box, Typography, Button, Card, CardMedia, CardContent, CardActions, Autocomplete, TextField, Stack, Grid, CardHeader } from "@mui/material"
 import { Avatar, Chip } from "@mui/material"
 
