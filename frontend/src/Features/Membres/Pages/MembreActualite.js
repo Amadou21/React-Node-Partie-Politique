@@ -1,5 +1,5 @@
 import React from 'react';
-import AppLayout from '../Layout/AppLayout';
+import AppLayout from '../../Layout/AppLayout';
 
 const MembreActualite = () => {
     return (

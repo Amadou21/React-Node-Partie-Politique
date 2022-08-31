@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
@@ -28,6 +29,32 @@ const App = () => {
 
     { link: "/userProfil/:id", element: <UserProfil /> },
   ];
+=======
+import React, {useState} from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
+import Accueil from './Features/Accueil/Accueil'
+import Actualites from './Features/Accueil/Actualites';
+import Projet from './Features/Accueil/Projet';
+import Connexion from './Features/Membres/Pages/Connexion';
+import Inscription from './Features/Membres/Pages/Inscription';
+import MembreActualite from './Features/Membres/Pages/MembreActualite';
+import MembreRecherche from './Features/Membres/Pages/MembreRecherche';
+
+const App = () => {
+
+  const [auth, setAuth] = useState(false);
+
+  const routes = [
+    { link: '/', element: <Accueil /> },
+    { link: '/projet', element: <Projet /> },
+    { link: '/actualites', element: <Actualites /> },
+    { link: '/connexion', element: <Connexion /> },
+    { link: '/inscription', element: <Inscription /> },
+    /*{ link: '/membre-actualites', element: <MembreActualite /> },
+    { link: '/membre-recherche', element: <MembreRecherche /> }*/
+  ]
+>>>>>>> ce5dc6c79a57a6c6124c100c73cbc1a2bb87753d
 
   const routesMembre = [
     { link: "/membre-actualites", element: <MembreActualite /> },
@@ -42,11 +69,19 @@ const App = () => {
             <Route key={route.link} path={route.link} element={route.element} />
           ))}
 
+<<<<<<< HEAD
           {routesMembre.map((route) => (
             <Route key={route.link} path={route.link} element={route.element} />
           ))}
         </Routes>
       </AppLayout>
+=======
+        {routesMembre.map(route => (
+          <Route key={route.link} path={route.link} element={ auth ? <MembreActualite /> : route.element} />
+        ))}
+
+      </Routes>
+>>>>>>> ce5dc6c79a57a6c6124c100c73cbc1a2bb87753d
     </BrowserRouter>
   );
 };
