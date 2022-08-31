@@ -21,17 +21,20 @@ const App = () => {
     { link: "/actualites", element: <Actualites /> },
     { link: "/connexion", element: <Connexion /> },
     { link: "/inscription", element: <Inscription /> },
-    /*{ link: '/membre-actualites', element: <MembreActualite /> },
-    { link: '/membre-recherche', element: <MembreRecherche /> }*/
+  ];
+
+  const routesMembre = [
+    { link: '/connexion', element: <Connexion /> },
+    { link: '/inscription', element: <Inscription /> },
+    { link: "/membre-actualites", element: <MembreActualite /> },
+    { link: "/membre-recherche", element: <MembreRecherche /> },
+  ];
+
+  const routesUser = [
     { link: "/compte/:id", element: <UserCompte /> },
     { link: "/tableauDeBord", element: <TableauDeBord /> },
     { link: "/userDetail/:id", element: <UserDetail /> },
     { link: "/userProfil/:id", element: <UserProfil /> },
-  ];
-
-  const routesMembre = [
-    { link: "/membre-actualites", element: <MembreActualite /> },
-    { link: "/membre-recherche", element: <MembreRecherche /> },
   ];
 
   return (
@@ -41,6 +44,13 @@ const App = () => {
           <Route key={route.link} path={route.link} element={route.element} />
         ))}
         {routesMembre.map((route) => (
+          <Route
+            key={route.link}
+            path={route.link}
+            element={auth ? <MembreActualite /> : route.element}
+          />
+        ))}
+        {routesUser.map((route) => (
           <Route
             key={route.link}
             path={route.link}
