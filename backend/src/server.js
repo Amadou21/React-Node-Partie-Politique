@@ -31,6 +31,7 @@ const routers = [
 const port = 3001;
 
 routers.forEach(router => router.addRoutes(app));
+userRouter.addRoutes(app);
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
