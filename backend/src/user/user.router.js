@@ -41,11 +41,15 @@ const find = async (req, res) => {
     const email = req.params.email;
     const password = req.params.password;
     user = await service.find(email, password);
-    if (user == null) { res.status(401).json(user) }
+    if (user === null) { res.status(401).json('refuse') }
     else {
         let token = jwt.sign({ email, password }, "cHJvamV0LXJlYWN0");
         res.status(200).json({ token })
     }
+}
+
+const isAuth = async (req, res) => {
+
 }
 
 const addRoutes = (app) => {
@@ -56,6 +60,7 @@ const addRoutes = (app) => {
     router.get('/:id', findById)
     router.get('/', findAll)
     router.get('/login/:email/:password', find)
+    router.get('/auth/:token', find)
     app.use(path, router);
 }
 
