@@ -1,17 +1,17 @@
 const { sequelize, Sequelize, defaultOptions } = require('../db/db');
 
-const ClientModel = sequelize
+const UserModel = sequelize
     .define('UserModel', {
         idUser: { type: Sequelize.BIGINT, primaryKey: true, autoIncrement: true },
-        firstName: { type: Sequelize.STRING },
-        lastName: { type: Sequelize.STRING },
+        prenom: { type: Sequelize.STRING },
+        nom: { type: Sequelize.STRING },
         login: { type: Sequelize.STRING },
-        motDePasse : { type: Sequelize.STRING }
+        motDePass: { type: Sequelize.STRING }
     }, {
         ...defaultOptions,
         tableName: 'user',
     });
 
 module.exports = {
-    ClientModel,
+    UserModel,
 };

@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Accueil from "./Features/Accueil/Accueil";
 import Actualites from "./Features/Accueil/Actualites";
 import Projet from "./Features/Accueil/Projet";
+import LoginTraitement from "./Features/Membres/Components/LoginTraitement";
 import Connexion from "./Features/Membres/Pages/Connexion";
 import Inscription from "./Features/Membres/Pages/Inscription";
 import MembreActualite from "./Features/Membres/Pages/MembreActualite";
@@ -21,6 +22,7 @@ const App = () => {
     { link: "/actualites", element: <Actualites /> },
     { link: "/connexion", element: <Connexion /> },
     { link: "/inscription", element: <Inscription /> },
+    { link: "/login/:email/:password", element: <LoginTraitement /> },
   ];
 
   const routesMembre = [

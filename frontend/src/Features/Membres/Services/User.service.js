@@ -1,5 +1,5 @@
-import { crudLocalhost } from "../../shared/service.utils";
+import { crudLocalhost } from "../../../shared/service.utils";
 
 const entityName = "users/";
 
-export const { findAll, findById, destroy, create, update } = crudLocalhost(entityName);
+export const { findAll, findById, destroy, create, update, find } = crudLocalhost(entityName);
