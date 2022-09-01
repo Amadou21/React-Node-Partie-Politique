@@ -53,10 +53,10 @@ const AppLayout = ({ children }) => {
     // }
     switch (setting) {
       case "Compte":
-        navigate("userDetail/1");
+        navigate("/userDetail/1");
         break;
       case "Tableau de bord":
-        navigate("tableauDeBord");
+        navigate("/tableauDeBord");
         break;
       case "Déconnexion":
         navigate("/");

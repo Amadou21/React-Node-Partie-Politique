@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
-import { findAll, findById, destroy, create, update } from "./User.service";
-import { useCreate as _useCreate, useDelete as _useDelete, useUpdate as _useUpdate} from "../../../shared/store";
+import { findAll, findById, destroy, create, update, find } from "./User.service";
+import { useCreate as _useCreate, useDelete as _useDelete, useUpdate as _useUpdate } from "../../../shared/store";
 
 const entity = "users";
 
@@ -14,6 +14,12 @@ export const useUsers = () => {
 export const useUserById = (id) => {
     const { data, ...others } = useQuery([entity, "findById"], () => findById(id));
     let user = data || [];
+    return { user, ...others };
+}
+
+export const useUserByLogin = (login, motDePass) => {
+    const { data, ...others } = useQuery([entity, "findByLogin"], () => find(login, motDePass));
+    let user = data;
     return { user, ...others };
 }
 

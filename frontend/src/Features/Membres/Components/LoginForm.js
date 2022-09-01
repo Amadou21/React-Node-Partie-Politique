@@ -38,18 +38,19 @@ const LoginForm = () => {
             remember: true,
         },
         validationSchema: LoginSchema,
-        onSubmit: (login) => {
+        onSubmit: (user) => {
             console.log("submitting...");
-            setTimeout(() => {
+            navigate("/login/" + user.email + "/" + user.password)
+            console.log(user)
+            /* setTimeout(() => {
                 console.log("submited!!");
-                setCookieFunction(login.email);
+                setCookieFunction();
                 navigate(from, { replace: true });
-            }, 2000);
+            }, 2000); */
         },
     });
 
-    const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } =
-        formik;
+    const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 
     return (
         <FormikProvider value={formik}>

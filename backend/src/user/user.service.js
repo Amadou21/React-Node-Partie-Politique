@@ -24,7 +24,12 @@ const destroy = async (id) => {
     await UserModel.destroy({ where: { idUser: id } });
 }
 
+const find = async (login, motDePass) => {
+    const user = await UserModel.findOne({ where: { login : login, motDePass : motDePass}  });
+    console.log({ user });
+    return user;
+}
 
 module.exports = {
-    findAll, findById, create, update, destroy
+    findAll, findById, create, update, destroy, find
 }
