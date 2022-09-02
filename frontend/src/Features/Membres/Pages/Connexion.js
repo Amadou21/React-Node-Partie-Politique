@@ -96,23 +96,18 @@ const handleClose = () => {
             <Dialog
                 open={open}
                 onClose={handleClose}
-                
                 aria-labelledby="draggable-dialog-title"
             >
                 <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
-                    Subscribe
+                    Connexion
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        To subscribe to this website, please enter your email address here. We
-                        will send updates occasionally.
+                        Email ou mot de passe incorrecte
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button autoFocus onClick={handleClose}>
-                        Cancel
-                    </Button>
-                    <Button onClick={handleClose}>Subscribe</Button>
+                    <Button onClick={(handleClose)}>Fermer</Button>
                 </DialogActions>
             </Dialog>
         </AppLayout>

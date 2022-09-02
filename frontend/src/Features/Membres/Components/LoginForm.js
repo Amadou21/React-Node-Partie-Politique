@@ -9,11 +9,12 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import VisibilityOffICon from '@mui/icons-material/VisibilityOff';
 import { useUserByLogin } from "../Services/User.store";
 import SweetAlert2 from 'sweetalert2';
+import { find } from "../Services/User.service";
 
 let easing = [0.6, -0.05, 0.01, 0.99];
 const animate = { opacity: 1, y: 0, transition: { duration: 0.6, ease: easing, delay: 0.16, }, };
 
-const LoginForm = ({handleClickOpen}) => {
+const LoginForm = ({ handleClickOpen }) => {
     const { setAuth } = useContext(AuthContext);
 
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ const LoginForm = ({handleClickOpen}) => {
     const from = location.state?.from?.pathname || "/";
 
     const [showPassword, setShowPassword] = useState(false);
-    const { find, data, ...others } = useUserByLogin();
+    // const { find, status, ...others } = useUserByLogin();
     const [swalProps, setSwalProps] = useState({});
 
     const setCookieFunction = (value) => {
@@ -42,13 +43,25 @@ const LoginForm = ({handleClickOpen}) => {
             remember: true,
         },
         validationSchema: LoginSchema,
-        onSubmit: (user) => {
-            find(user);
-            if (data === 'refuse') { 
+        onSubmit: async (user) => {
+            const response = await find(user);
+            if (response.ok) {
+                console.log('la reponse est a ok :', response.ok);
+                navigate("/membre-actualites")
+                //faire une redirection
+            } else {
+                console.log('la reponse nest pas ok :', response.ok);
                 handleClickOpen();
             }
-            else{ navigate('/membre-recherche') }
-    }});
+            console.log('data :', response);
+            console.log('data3 :');
+
+            /*if (status === 'refuse') {    
+                handleClickOpen();
+            }
+            else { navigate('/membre-recherche') }*/
+        }
+    });
 
     const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 
@@ -105,9 +118,9 @@ const LoginForm = ({handleClickOpen}) => {
                                 Mot de passe oublié
                             </Link>
                         </Stack>
-                        <Button fullWidth size="large" type="submit" variant="contained" 
+                        <Button fullWidth size="large" type="submit" variant="contained"
                         >
-                            {isSubmitting ? (<CircularProgress sx={{color:'white'}}/>) : "Connexion"}
+                            {isSubmitting ? (<CircularProgress sx={{ color: 'white' }} />) : "Connexion"}
                         </Button>
                     </Box>
                 </Box>

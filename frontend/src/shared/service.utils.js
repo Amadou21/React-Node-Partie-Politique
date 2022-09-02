@@ -21,7 +21,6 @@ const crud = urlBase => (entityName) => {
         { method: "PUT", headers: { "Content-Type": "application/json", }, body: JSON.stringify(data), }
       );
     },
-    find: async ({ ...data }) => await fetch(entityUrl + 'login/' + data.email + '/' + data.password).then(res => res.json()),
   }
 }
 export const crudLocalhost = crud(urlBase);

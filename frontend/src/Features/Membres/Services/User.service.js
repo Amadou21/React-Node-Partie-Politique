@@ -1,9 +1,17 @@
-import { crudLocalhost } from "../../../shared/service.utils";
+import { crudLocalhost, urlBase } from "../../../shared/service.utils";
 //import jwtDecode from 'jsonwebtoken';
 
 const entityName = "users/";
 
-export const { findAll, findById, destroy, create, update, find } = crudLocalhost(entityName);
+export const { findAll, findById, destroy, create, update } = crudLocalhost(entityName);
+
+export const find = async (data) => {
+    const resp = await fetch(urlBase + entityName + 'login/' + data.email + '/' + data.password);
+    const resptoken = await fetch(urlBase + entityName + 'login/' + data.email + '/' + data.password).then(res => res.json());
+    console.log(resptoken);
+    return (resp);
+}
+export const isAuth = async (token) => await fetch(urlBase + entityName + 'auth/' + token, { method: "GET", headers: { "authorization": "bearers " + token }, body: JSON.stringify(token), })
 
 /*export function hasAuthenticated() {
     const token = window.localStorage.getItem('token');
