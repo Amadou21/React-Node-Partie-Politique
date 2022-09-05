@@ -41,22 +41,21 @@ const find = async (req, res) => {
   const email = req.params.email;
   const password = req.params.password;
   user = await service.find(email, password);
-  if (user == null) {
-    res.status(401).json(user);
+  if (user === null) {
+    res.status(401).json("Le login ou le mdp est incorrect");
   } else {
-    let token = jwt.sign({ email, password }, "cHJvamV0LXJlYWN0");
+    let token = jwt.sign(user.idUser, "cHJvamV0LXJlYWN0");
     res.status(200).json({ token });
   }
 };
 
-const findLogin = async (req, res) => {
-  const email = req.params.email;
-  user = await service.findLogin(email);
-  if (user == null) {
-    res.status(401).json(user);
-  } else {
-    let token = jwt.sign({ email }, "cHJvamV0LXJlYALY");
-    res.status(200).json({ token });
+const isAuth = async (req, res) => {
+  try {
+    const token = req.params.token;
+    jwt.verify(token, "cHJvamV0LXJlYWN0");
+    res.status(200).json({ message: "Token d'authenfication valide" });
+  } catch {
+    res.status(401).json({ message: "Token d'authenfication Invalide" });
   }
 };
 
@@ -68,7 +67,7 @@ const addRoutes = (app) => {
   router.get("/:id", findById);
   router.get("/", findAll);
   router.get("/login/:email/:password", find);
-  router.get("/login/:email", findLogin);
+  router.get("/auth/:token", isAuth);
   app.use(path, router);
 };
 
