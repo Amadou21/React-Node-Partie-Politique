@@ -32,14 +32,13 @@ const animate = {
 const SignupForm = ({ setAuth }) => {
   // les hooks
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
   const handleClickVariant = (message, variant) => {
     alert("handleClickVariant");
     // variant could be success, error, warning, info, or default
     enqueueSnackbar(message + " ", { variant });
   };
-
-  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
 
