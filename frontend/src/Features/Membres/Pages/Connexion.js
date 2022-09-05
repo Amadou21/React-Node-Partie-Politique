@@ -1,9 +1,22 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { Container, Typography, Link, Box } from "@mui/material";
+import { Container, Typography, Link, Box, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from "@mui/material";
+import Paper, { PaperProps } from '@mui/material/Paper'
 import styled from "@emotion/styled";
 import LoginForm from "../Components/LoginForm";
 import AppLayout from "../../Layout/AppLayout";
+import Draggable from 'react-draggable';
+
+function PaperComponent({PaperProps}) {
+    return (
+      <Draggable
+        handle="#draggable-dialog-title"
+        cancel={'[class*="MuiDialogContent-root"]'}
+      >
+        <Paper PaperProps={PaperProps} />
+      </Draggable>
+    );
+  }
 
 //////////////////////////////////
 const RootStyle = styled(Box)({
@@ -44,7 +57,17 @@ const fadeInUp = {
     },
 };
 const Connexion = () => {
-    
+
+    const [open, setOpen] = React.useState(false);
+
+const handleClickOpen = () => {
+  setOpen(true);
+};
+
+const handleClose = () => {
+  setOpen(false);
+};
+
     return (
         <AppLayout>
             <RootStyle sx={{ ml: 0 }}>
@@ -55,7 +78,7 @@ const Connexion = () => {
                                 Connectez vous a votre compte
                             </Typography>
                         </HeadingStyle>
-                        <LoginForm />
+                        <LoginForm handleClickOpen={handleClickOpen}/>
                         <Typography
                             {...fadeInUp}
                             variant="body2"
@@ -70,6 +93,23 @@ const Connexion = () => {
                     </ContentStyle>
                 </Container>
             </RootStyle>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="draggable-dialog-title"
+            >
+                <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
+                    Connexion
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Email ou mot de passe incorrecte
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={(handleClose)}>Fermer</Button>
+                </DialogActions>
+            </Dialog>
         </AppLayout>
     );
 };

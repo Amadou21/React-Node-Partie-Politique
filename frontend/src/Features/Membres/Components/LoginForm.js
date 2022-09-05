@@ -1,28 +1,23 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
-import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { Form, FormikProvider, useFormik } from "formik";
-import AuthContext from "../../../Context/Connexion.context";
+import { useAuthContext } from "../../../Context/AuthContext";
 import * as Yup from "yup";
-import { Box, Checkbox, FormControlLabel, IconButton, InputAdornment, Link, Stack, TextField, Button } from "@mui/material";
+import { Box, Checkbox, FormControlLabel, IconButton, InputAdornment, Link, Stack, TextField, Button, CircularProgress } from "@mui/material";
 import { motion } from "framer-motion";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import VisibilityOffICon from '@mui/icons-material/VisibilityOff';
+import { find } from "../Services/User.service";
 
 let easing = [0.6, -0.05, 0.01, 0.99];
 const animate = { opacity: 1, y: 0, transition: { duration: 0.6, ease: easing, delay: 0.16, }, };
 
-const LoginForm = () => {
-    const { setAuth } = useContext(AuthContext);
-    
+const LoginForm = ({ handleClickOpen }) => {
+    const { setAuth } = useAuthContext();
+
     const navigate = useNavigate();
-    const location = useLocation();
-    const from = location.state?.from?.pathname || "/";
 
     const [showPassword, setShowPassword] = useState(false);
-
-    const setCookieFunction = (value) => {
-        localStorage.setLogin('login', value)
-    }
 
     const LoginSchema = Yup.object().shape({
         email: Yup.string()
@@ -38,16 +33,19 @@ const LoginForm = () => {
             remember: true,
         },
         validationSchema: LoginSchema,
-        onSubmit: (user) => {
-            console.log("submitting...");
-            navigate("/login/" + user.email + "/" + user.password)
-            console.log(user)
-            /* setTimeout(() => {
-                console.log("submited!!");
-                setCookieFunction();
-                navigate(from, { replace: true });
-            }, 2000); */
-        },
+        onSubmit: async (user) => {
+            const response = await find(user);
+            if (response.ok) {
+                console.log('la reponse est a ok :', response.ok);
+                setAuth(true);
+                navigate("/membre-actualites")
+            } else {
+                console.log('la reponse nest pas ok :', response.ok);
+                handleClickOpen();
+            }
+            console.log('data :', response);
+            console.log('data3 :');
+        }
     });
 
     const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
@@ -105,9 +103,9 @@ const LoginForm = () => {
                                 Mot de passe oublié
                             </Link>
                         </Stack>
-                        <Button fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}
+                        <Button fullWidth size="large" type="submit" variant="contained"
                         >
-                            {isSubmitting ? "Un instant..." : "Connexion"}
+                            {isSubmitting ? (<CircularProgress sx={{ color: 'white' }} />) : "Connexion"}
                         </Button>
                     </Box>
                 </Box>
