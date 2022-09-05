@@ -11,10 +11,13 @@ import {
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { motion } from "framer-motion";
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import VisibilityOffICon from '@mui/icons-material/VisibilityOff';
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import VisibilityOffICon from "@mui/icons-material/VisibilityOff";
+import { create, findLogin } from "../Services/User.service";
+import { useSnackbar } from "notistack";
 
 /////////////////////////////////////////////////////////////
+
 let easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
   opacity: 1,
@@ -27,38 +30,51 @@ const animate = {
 };
 
 const SignupForm = ({ setAuth }) => {
+  // les hooks
+  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+
+  const handleClickVariant = (message, variant) => {
+    alert("handleClickVariant");
+    // variant could be success, error, warning, info, or default
+    enqueueSnackbar(message + " ", { variant });
+  };
 
   const [showPassword, setShowPassword] = useState(false);
 
   const SignupSchema = Yup.object().shape({
-    firstName: Yup.string()
+    prenom: Yup.string()
       .min(2, "Trop court!")
       .max(50, "Trop long!")
-      .required("Prenom obligatoire"),
-    lastName: Yup.string()
+      .required("Prenom obligatoire")
+      .default(""),
+    nom: Yup.string()
       .min(2, "Trop court!")
       .max(50, "Trop long!")
-      .required("Nom obligatoire"),
-    email: Yup.string()
+      .required("Nom obligatoire")
+      .default(""),
+    login: Yup.string()
       .email("Donnez un email valide")
-      .required("Email obligatoire"),
-    password: Yup.string().required("Mot de passe obligatoire"),
+      .required("Email obligatoire")
+      .default(""),
+    motDePass: Yup.string().required("Mot de passe obligatoire").default(""),
   });
 
   const formik = useFormik({
-    initialValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-    },
+    initialValues: SignupSchema.getDefaultFromShape(),
     validationSchema: SignupSchema,
-    onSubmit: () => {
-      setTimeout(() => {
-        setAuth(true);
-        navigate("/", { replace: true });
-      }, 2000);
+    onSubmit: async (user, { resetForm, setSubmitting }) => {
+      const le_login = await findLogin(user.login);
+      if (le_login.ok) {
+        handleClickVariant("Cet email existe déjà", "error");
+      } else {
+        setTimeout(() => {
+          create(user);
+          setAuth = true;
+          handleClickVariant("Votre compte a été creer avec succès", "success");
+          navigate("/membre-actualites");
+        }, 2000);
+      }
     },
   });
 
@@ -76,19 +92,20 @@ const SignupForm = ({ setAuth }) => {
             spacing={2}
           >
             <TextField
+              focus
               fullWidth
               label="Prenom"
-              {...getFieldProps("firstName")}
-              error={Boolean(touched.firstName && errors.firstName)}
-              helperText={touched.firstName && errors.firstName}
+              {...getFieldProps("prenom")}
+              error={Boolean(touched.prenom && errors.prenom)}
+              helperText={touched.prenom && errors.prenom}
             />
 
             <TextField
               fullWidth
               label="Nom"
-              {...getFieldProps("lastName")}
-              error={Boolean(touched.lastName && errors.lastName)}
-              helperText={touched.lastName && errors.lastName}
+              {...getFieldProps("nom")}
+              error={Boolean(touched.nom && errors.nom)}
+              helperText={touched.nom && errors.nom}
             />
           </Stack>
 
@@ -103,9 +120,9 @@ const SignupForm = ({ setAuth }) => {
               autoComplete="username"
               type="email"
               label="Email"
-              {...getFieldProps("email")}
-              error={Boolean(touched.email && errors.email)}
-              helperText={touched.email && errors.email}
+              {...getFieldProps("login")}
+              error={Boolean(touched.login && errors.login)}
+              helperText={touched.login && errors.login}
             />
 
             <TextField
@@ -113,7 +130,7 @@ const SignupForm = ({ setAuth }) => {
               autoComplete="current-password"
               type={showPassword ? "text" : "password"}
               label="Mot de passe"
-              {...getFieldProps("password")}
+              {...getFieldProps("motDePass")}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -122,16 +139,16 @@ const SignupForm = ({ setAuth }) => {
                       onClick={() => setShowPassword((prev) => !prev)}
                     >
                       {showPassword ? (
-                          <VisibilityOffICon />
+                        <VisibilityOffICon />
                       ) : (
-                          <RemoveRedEyeIcon />
+                        <RemoveRedEyeIcon />
                       )}
                     </IconButton>
                   </InputAdornment>
                 ),
               }}
-              error={Boolean(touched.password && errors.password)}
-              helperText={touched.password && errors.password}
+              error={Boolean(touched.motDePass && errors.motDePass)}
+              helperText={touched.motDePass && errors.motDePass}
             />
           </Stack>
 
@@ -147,7 +164,7 @@ const SignupForm = ({ setAuth }) => {
               variant="contained"
               loading={isSubmitting}
             >
-              Sign up
+              S'inscrire
             </LoadingButton>
           </Box>
         </Stack>
