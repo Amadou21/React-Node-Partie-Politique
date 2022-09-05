@@ -26,9 +26,9 @@ const App = () => {
   ];
 
   const routesMembre = [
-    { link: '/connexion', element: <Connexion /> },
-    { link: '/inscription', element: <Inscription /> },
-    { link: "/membre-actualites", element: <MembreActualite /> },
+    { link: "/connexion", element: <Connexion /> },
+    { link: "/inscription", element: <Inscription setAuth={auth} /> },
+    { link: "/membre-actualites", element: <MembreActualite setAuth={auth} /> },
     { link: "/membre-recherche", element: <MembreRecherche /> },
   ];
 
