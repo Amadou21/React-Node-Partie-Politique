@@ -33,12 +33,12 @@ const find = async (login, motDePass) => {
 };
 
 const findLogin = async (login) => {
-    const user = await UserModel.findOne({
-      where: { login: login },
-    });
-    console.log("user backend", { user });
-    return user;
-  };
+  const user = await UserModel.findOne({
+    where: { login: login },
+  });
+  console.log("user backend", { user });
+  return user;
+};
 
 module.exports = {
   findAll,

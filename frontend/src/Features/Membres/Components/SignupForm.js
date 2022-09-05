@@ -35,7 +35,6 @@ const SignupForm = ({ setAuth }) => {
   const navigate = useNavigate();
 
   const handleClickVariant = (message, variant) => {
-    alert("handleClickVariant");
     // variant could be success, error, warning, info, or default
     enqueueSnackbar(message + " ", { variant });
   };
@@ -92,7 +91,6 @@ const SignupForm = ({ setAuth }) => {
             spacing={2}
           >
             <TextField
-              focus
               fullWidth
               label="Prenom"
               {...getFieldProps("prenom")}
