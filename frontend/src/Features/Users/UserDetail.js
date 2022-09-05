@@ -110,7 +110,7 @@ const UserDetail = () => {
 
             <Button
               variant={"contained"}
-            // onClick={() => navigate(updateuserLink)}
+              // onClick={() => navigate(updateuserLink)}
             >
               modifier
             </Button>
@@ -135,8 +135,8 @@ const UserDetail = () => {
             Attention
           </DialogTitle>
           <DialogContent>
-            Voullez vous réellement supprimer votre comptes? Cette opération est
-            irréversible
+            Voullez vous réellement supprimer votre comptes?
+            <br /> Cette opération est irréversible
           </DialogContent>
           <DialogActions>
             {/* <Button onClick={handleClose}>Non</Button> */}
