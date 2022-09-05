@@ -1,33 +1,23 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
-import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { Form, FormikProvider, useFormik } from "formik";
-import AuthContext from "../../../Context/Connexion.context";
+import { useAuthContext } from "../../../Context/AuthContext";
 import * as Yup from "yup";
 import { Box, Checkbox, FormControlLabel, IconButton, InputAdornment, Link, Stack, TextField, Button, CircularProgress } from "@mui/material";
 import { motion } from "framer-motion";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import VisibilityOffICon from '@mui/icons-material/VisibilityOff';
-import { useUserByLogin } from "../Services/User.store";
-import SweetAlert2 from 'sweetalert2';
 import { find } from "../Services/User.service";
 
 let easing = [0.6, -0.05, 0.01, 0.99];
 const animate = { opacity: 1, y: 0, transition: { duration: 0.6, ease: easing, delay: 0.16, }, };
 
 const LoginForm = ({ handleClickOpen }) => {
-    const { setAuth } = useContext(AuthContext);
+    const { setAuth } = useAuthContext();
 
     const navigate = useNavigate();
-    const location = useLocation();
-    const from = location.state?.from?.pathname || "/";
 
     const [showPassword, setShowPassword] = useState(false);
-    // const { find, status, ...others } = useUserByLogin();
-    const [swalProps, setSwalProps] = useState({});
-
-    const setCookieFunction = (value) => {
-        localStorage.setLogin('login', value)
-    }
 
     const LoginSchema = Yup.object().shape({
         email: Yup.string()
@@ -47,19 +37,14 @@ const LoginForm = ({ handleClickOpen }) => {
             const response = await find(user);
             if (response.ok) {
                 console.log('la reponse est a ok :', response.ok);
+                setAuth(true);
                 navigate("/membre-actualites")
-                //faire une redirection
             } else {
                 console.log('la reponse nest pas ok :', response.ok);
                 handleClickOpen();
             }
             console.log('data :', response);
             console.log('data3 :');
-
-            /*if (status === 'refuse') {    
-                handleClickOpen();
-            }
-            else { navigate('/membre-recherche') }*/
         }
     });
 
