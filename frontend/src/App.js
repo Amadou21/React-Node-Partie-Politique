@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useAuthContext } from "./Context/AuthContext";
 import Accueil from "./Features/Accueil/Accueil";
 import Actualites from "./Features/Accueil/Actualites";
 import Projet from "./Features/Accueil/Projet";
@@ -13,7 +14,7 @@ import UserDetail from "./Features/Users/UserDetail";
 import UserProfil from "./Features/Users/UserProfil";
 
 const App = () => {
-  const [auth, setAuth] = useState(false);
+  const { auth } = useAuthContext();
 
   const routes = [
     { link: "/", element: <Accueil /> },

@@ -50,15 +50,15 @@ const find = async (req, res) => {
 };
 
 const findLogin = async (req, res) => {
-    const email = req.params.email;
-    user = await service.findLogin(email);
-    if (user == null) {
-      res.status(401).json(user);
-    } else {
-      let token = jwt.sign({ email }, "cHJvamV0LXJlYALY");
-      res.status(200).json({ token });
-    }
-  };
+  const email = req.params.email;
+  user = await service.findLogin(email);
+  if (user == null) {
+    res.status(401).json(user);
+  } else {
+    let token = jwt.sign({ email }, "cHJvamV0LXJlYALY");
+    res.status(200).json({ token });
+  }
+};
 
 const isAuth = async (req, res) => {
   try {

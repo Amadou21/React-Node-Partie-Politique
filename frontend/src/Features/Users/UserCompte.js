@@ -33,7 +33,10 @@ export const UserCard = ({ user }) => {
           subheader={user.prenom}
         />
         <CardContent sx={{ textAlign: "center" }}>
-          <Chip label={user.adresse} icon={<HomeIcon sx={{ fontsize: 15 }} />} />
+          <Chip
+            label={user.adresse}
+            icon={<HomeIcon sx={{ fontsize: 15 }} />}
+          />
         </CardContent>
       </Card>
     </AppLayout>

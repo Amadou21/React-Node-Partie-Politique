@@ -3,18 +3,10 @@ import {
   Box,
   Card,
   CardContent,
-  CardHeader,
   CardMedia,
-  Grid,
   IconButton,
   Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
   TextField,
-  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
@@ -113,7 +105,7 @@ const UserProfil = () => {
                 sx={{ fontFamily: "Times New Roman" }}
               >
                 <EditIcon />
-                <a href="#">{modifier}</a>
+                <a href="!#">{modifier}</a>
               </IconButton>
             </Box>
           </CardContent>
