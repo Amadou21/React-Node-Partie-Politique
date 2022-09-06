@@ -15,7 +15,7 @@ const crud = (urlBase) => (entityName) => {
       return true;
     },
     create: async ({ ...data }) => {
-      await fetch(entityUrl, {
+      return await fetch(entityUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
