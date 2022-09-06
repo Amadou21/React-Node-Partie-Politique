@@ -8,7 +8,12 @@ const create = async (req, res) => {
   let user = req.body;
   console.log({ user });
   user = await service.create(user);
-  res.json(user);
+  if (user !== null) {
+    let token = jwt.sign(user.idUser, "cHJvamV0LXJlYWN0");
+    res.status(200).json({ token });
+  } else {
+    res.status(401).json("Une erreur est survenu");
+  }
 };
 
 const findAll = async (req, res) => {
@@ -38,14 +43,21 @@ const destroy = async (req, res) => {
 };
 
 const find = async (req, res) => {
-  const email = req.params.email;
-  const password = req.params.password;
+  const { email, password, remember } = req.body;
+  if (remember === true) {
+    var rememberTime = "8760h";
+  } else {
+    rememberTime = "1h";
+  }
   user = await service.find(email, password);
   if (user === null) {
-    res.status(401).json("Le login ou le mdp est incorrect");
+    res.status(401).json({ message: "Le login ou le mdp est incorrect" });
   } else {
-    let token = jwt.sign(user.idUser, "cHJvamV0LXJlYWN0");
-    res.status(200).json({ token });
+    let idUser = user.idUser;
+    let token = jwt.sign({ idUser }, "cHJvamV0LXJlYWN0", {
+      expiresIn: rememberTime,
+    });
+    res.status(200).json({ idUser, token });
   }
 };
 
@@ -63,8 +75,8 @@ const findLogin = async (req, res) => {
 const isAuth = async (req, res) => {
   try {
     const token = req.params.token;
-    jwt.verify(token, "cHJvamV0LXJlYWN0");
-    res.status(200).json({ message: "Token d'authenfication valide" });
+    var user = jwt.verify(token, "cHJvamV0LXJlYWN0");
+    res.status(200).json({ user });
   } catch {
     res.status(401).json({ message: "Token d'authenfication Invalide" });
   }
@@ -77,7 +89,7 @@ const addRoutes = (app) => {
   router.delete("/:id", destroy);
   router.get("/:id", findById);
   router.get("/", findAll);
-  router.get("/login/:email/:password", find);
+  router.post("/login/", find);
   router.get("/auth/:token", isAuth);
   router.get("/login/:email", findLogin);
   app.use(path, router);

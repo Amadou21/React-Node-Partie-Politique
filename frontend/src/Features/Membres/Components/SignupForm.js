@@ -13,7 +13,7 @@ import { LoadingButton } from "@mui/lab";
 import { motion } from "framer-motion";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffICon from "@mui/icons-material/VisibilityOff";
-import { create, findLogin } from "../Services/User.service";
+import { create2, findLogin } from "../Services/User.service";
 import { useSnackbar } from "notistack";
 
 /////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ const SignupForm = ({ setAuth }) => {
         handleClickVariant("Cet email existe déjà", "error");
       } else {
         setTimeout(() => {
-          create(user);
+          create2(user);
           setAuth = true;
           handleClickVariant("Votre compte a été creer avec succès", "success");
           navigate("/membre-actualites");

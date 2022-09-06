@@ -6,20 +6,32 @@ const entityName = "users/";
 export const { findAll, findById, destroy, create, update } =
   crudLocalhost(entityName);
 
-export const find = async (data) => {
-  const response = await fetch(
-    urlBase + entityName + "login/" + data.email + "/" + data.password
-  );
-  const { token } = await fetch(
-    urlBase + entityName + "login/" + data.email + "/" + data.password
-  ).then((res) => res.json());
+export const create2 = async (data) => {
+  const resp = await create(data).then((res) => res.json());
+  console.log("token", resp);
+  const { token } = resp;
+  addToken("token", token);
+};
+
+export const find = async ({ ...data }) => {
+  const response = await fetch(urlBase + entityName + "login/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  const { token, idUser } = await fetch(urlBase + entityName + "login/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  }).then((res) => res.json());
   console.log(token);
   if (response.ok) {
     addToken("token", token);
+    addToken("id", idUser);
   }
   return response;
 };
-export const isAuth = async (token) => {
+export const isAuth = async ({ ...token }) => {
   const resp = await fetch(urlBase + entityName + "auth/" + token, {
     method: "GET",
     headers: { authorization: "bearers " + token },
