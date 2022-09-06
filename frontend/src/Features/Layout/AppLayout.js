@@ -13,6 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../Context/AuthContext";
 
 const pages = [
   { label: "Accueil", link: "/" },
@@ -29,6 +30,7 @@ const AppLayout = ({ children }) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
+  const { auth } = useAuthContext();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -46,11 +48,7 @@ const AppLayout = ({ children }) => {
   };
 
   const handleRedirection = (setting) => {
-    // if (setting === "Déconnexion") {
-    //   navigate("Accueil");
-    // } else if (setting === "Profil") {
-    //   navigate("/UserDetail");
-    // }
+
     switch (setting) {
       case "Compte":
         navigate("/userDetail/1");
@@ -162,8 +160,8 @@ const AppLayout = ({ children }) => {
                 </Button>
               ))}
             </Box>
-
-            <Box sx={{ flexGrow: 0 }}>
+            {auth && (
+              <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
@@ -198,6 +196,7 @@ const AppLayout = ({ children }) => {
                 ))}
               </Menu>
             </Box>
+            )}
           </Toolbar>
         </Container>
       </AppBar>
