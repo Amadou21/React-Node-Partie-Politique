@@ -2,155 +2,239 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Dialog,
-  DialogActions,
-  DialogTitle,
-  DialogContent,
   Stack,
   TextField,
-  CardActions,
   Button,
   // Link as MuiLink,
   Box,
+  Avatar,
 } from "@mui/material";
 // import { Box } from "@mui/system";
 import React from "react";
 import { useNavigate } from "react-router-dom"; //useParams
-import WarningIcon from "@mui/icons-material/Warning";
 import AppLayout from "../Layout/AppLayout";
+//----------------------------------------------------------------
+import * as Yup from "yup";
+import { useFormik, Form, FormikProvider } from "formik";
+import { LoadingButton } from "@mui/lab";
+import { motion } from "framer-motion";
+import { create, findLogin } from "../Membres/Services/User.service";
+import { useSnackbar } from "notistack";
+
+let easing = [0.6, -0.05, 0.01, 0.99];
+const animate = {
+  opacity: 1,
+  y: 0,
+  transition: {
+    duration: 0.6,
+    ease: easing,
+    delay: 0.16,
+  },
+};
 
 const UserDetail = () => {
   // les hooks (useState, useNavigate etc...)
   const navigate = useNavigate();
-  // const { id } = useParams();
-  const [openDialog, setOpenDialog] = React.useState(false);
-
-  // les comportements
-  const retour = () => {
-    navigate("/");
-  };
-
-  const handleClose = () => {
-    setOpenDialog(false);
-  };
-
-  // const supprimerUser = () => {
-  //   setOpenDialog(true);
-  // };
-
   //les variables
   const users = [
     {
       id: 1,
       nom: "Doe",
       prenom: "Jane",
-      adresse: "Pourquoi tu veux savoir",
+      login: "alydiarra1@gmail.com",
     },
     {
       id: 2,
       nom: "DIARRA",
       prenom: "Aly",
-      adresse: "Pourquoi tu veux savoir",
+      login: "alydiarra2@gmail.com",
     },
     {
       id: 3,
       nom: "Maiga",
       prenom: "Abba",
-      adresse: "Pourquoi tu veux savoir",
+      login: "alydiarra3@gmail.com",
     },
     {
       id: 4,
       nom: "Sissoko",
       prenom: "Modibo",
-      adresse: "Pourquoi tu veux savoir",
+      login: "alydiarra@4gmail.com",
     },
   ];
   const user = users.find((user) => user.id === 2);
-  // const updateuserLink = "/users/update/" + user.iduser;
-  // const deleteuserLink = "/users/update/" + user.iduser;
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleClickVariant = (message, variant) => {
+    // variant could be success, error, warning, info, or default
+    enqueueSnackbar(message + " ", { variant });
+  };
+
+  const UserDetailSchema = Yup.object().shape({
+    prenom: Yup.string()
+      .min(2, "Trop court!")
+      .max(50, "Trop long!")
+      .required("Prenom obligatoire")
+      .default(user.prenom),
+    nom: Yup.string()
+      .min(2, "Trop court!")
+      .max(50, "Trop long!")
+      .required("Nom obligatoire")
+      .default(user.nom),
+    login: Yup.string()
+      .email("Donnez un email valide")
+      .required("Email obligatoire")
+      .default(user.login),
+    // motDePass: Yup.string().required("Mot de passe obligatoire").default(""),
+  });
+
+  const formik = useFormik({
+    initialValues: UserDetailSchema.getDefaultFromShape(),
+    validationSchema: UserDetailSchema,
+    onSubmit: async (user) => {
+      const le_login = await findLogin(user.login);
+      if (le_login.ok) {
+        handleClickVariant("Cet email existe déjà", "error");
+      } else {
+        setTimeout(() => {
+          create(user);
+          // setAuth = true;
+          handleClickVariant("Votre compte a été creer avec succès", "success");
+          navigate("/membre-actualites");
+        }, 2000);
+      }
+    },
+  });
+
+  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
   return (
     <AppLayout>
-      <Box>
-        <Card>
-          <CardHeader title="Detail du user" />
-          <CardContent>
-            <Stack spacing={3}>
-              <TextField
-                id="outlined-basic"
-                label="Nom"
-                variant="outlined"
-                value={user?.nom}
-                name={"nom"}
-                inputProps={{ readOnly: true }}
+      <FormikProvider value={formik}>
+        <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+          <Card>
+            <CardHeader title="Detail du user" />
+            <Stack
+              marginBottom={3}
+              alignItems="center"
+              component={motion.div}
+              initial={{ opacity: 0, y: 150 }}
+              animate={animate}
+              direction={{ xs: "column", sm: "column" }}
+              spacing={2}
+            >
+              <Avatar
+                src={"https://i.pravatar.cc/300"}
+                sx={{
+                  height: "25%",
+                  width: "25%",
+                  alignSelf: "center",
+                  mb: 3,
+                }}
               />
-              <TextField
-                id="outlined-basic"
-                label="Prenom"
-                variant="outlined"
-                value={user?.prenom}
-                name={"prenom"}
-                inputProps={{ readOnly: true }}
-              />
-              <TextField
-                id="outlined-basic"
-                label="Adresse"
-                variant="outlined"
-                name={"Adresse"}
-                value={user?.adresse}
-                inputProps={{ readOnly: true }}
-              />
+              <Button
+                variant="contained"
+                component="label"
+                sx={{ width: "30%" }}
+              >
+                Changer la photo
+                <input
+                  type="file"
+                  hidden
+                  accept="image/png, image/gif, image/jpeg, image/webp, image/jpg, image/heivc"
+                />
+              </Button>
             </Stack>
-          </CardContent>
+            <CardContent>
+              <Stack spacing={3}>
+                <Stack
+                  component={motion.div}
+                  initial={{ opacity: 0, y: 60 }}
+                  animate={animate}
+                  direction={{ xs: "column", sm: "row" }}
+                  spacing={2}
+                >
+                  <TextField
+                    fullWidth
+                    label="Prenom"
+                    {...getFieldProps("prenom")}
+                    error={Boolean(touched.prenom && errors.prenom)}
+                    helperText={touched.prenom && errors.prenom}
+                  />
 
-          <CardActions sx={{ justifyContent: "flex-end" }}>
-            <Button variant={"contained"} onClick={retour}>
-              retour
-            </Button>
+                  <TextField
+                    fullWidth
+                    label="Nom"
+                    {...getFieldProps("nom")}
+                    error={Boolean(touched.nom && errors.nom)}
+                    helperText={touched.nom && errors.nom}
+                  />
+                </Stack>
 
-            <Button
-              variant={"contained"}
-              // onClick={() => navigate(updateuserLink)}
-            >
-              modifier
-            </Button>
+                <Stack
+                  spacing={3}
+                  component={motion.div}
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={animate}
+                >
+                  <TextField
+                    fullWidth
+                    autoComplete="username"
+                    type="email"
+                    label="Email"
+                    {...getFieldProps("login")}
+                    error={Boolean(touched.login && errors.login)}
+                    helperText={touched.login && errors.login}
+                  />
 
-            <Button
-              variant={"contained"}
-              onClick={() => setOpenDialog(true)} //, navigate(deleteuserLink)
-            >
-              supprimer
-            </Button>
-          </CardActions>
-        </Card>
+                  {/* <TextField
+                    fullWidth
+                    autoComplete="current-password"
+                    type={showPassword ? "text" : "password"}
+                    label="Mot de passe"
+                    {...getFieldProps("motDePass")}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            edge="end"
+                            onClick={() => setShowPassword((prev) => !prev)}
+                          >
+                            {showPassword ? (
+                              <VisibilityOffICon />
+                            ) : (
+                              <RemoveRedEyeIcon />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    error={Boolean(touched.motDePass && errors.motDePass)}
+                    helperText={touched.motDePass && errors.motDePass}
+                  /> */}
+                </Stack>
 
-        <Dialog open={openDialog}>
-          <DialogTitle>
-            <WarningIcon
-              sx={{
-                color: "orange",
-                verticalAlign: "middle",
-              }}
-            />{" "}
-            Attention
-          </DialogTitle>
-          <DialogContent>
-            Voullez vous réellement supprimer votre comptes?
-            <br /> Cette opération est irréversible
-          </DialogContent>
-          <DialogActions>
-            {/* <Button onClick={handleClose}>Non</Button> */}
-            <Button
-              className="btn btn-primary"
-              onClick={handleClose}
-              sx={{ color: "red" }}
-            >
-              Ok
-            </Button>
-            {/* <Button onClick={handleDelete}>Oui</Button> */}
-          </DialogActions>
-        </Dialog>
-      </Box>
+                <Box
+                  component={motion.div}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={animate}
+                >
+                  <LoadingButton
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                    loading={isSubmitting}
+                  >
+                    Modifier
+                  </LoadingButton>
+                </Box>
+              </Stack>
+            </CardContent>
+          </Card>
+        </Form>
+      </FormikProvider>
     </AppLayout>
   );
 };

@@ -25,11 +25,12 @@ const UserProfil = () => {
     <AppLayout>
       <Stack
         direction="column"
-        justifyContent="center"
+        // justifyContent="center"
         alignItems="center"
-        spacing={2}
+        // spacing={2}
       >
-        <Card display="flex">
+        <Card>
+          {/* display="flex" */}
           <CardMedia
             // classes={mediaStyles}
             image={
@@ -43,7 +44,7 @@ const UserProfil = () => {
                 src={"https://i.pravatar.cc/300"}
                 sx={{
                   height: "50%",
-                  width: "50%",
+                  width: "55%",
                   alignSelf: "center",
                 }}
               />
