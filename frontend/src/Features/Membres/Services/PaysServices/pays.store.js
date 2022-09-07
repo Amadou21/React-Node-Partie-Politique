@@ -9,15 +9,10 @@ import {
 const entity = "pays";
 
 export const usePays = () => {
-  console.log("usePays1");
   const { data, refetch, ...others } = useQuery([entity, "findAll"], findAll, {
     refetchInterval: 2_000,
   });
-  console.log("usePays data", data);
-
   let pays = data || [];
-  console.log("usePays pays", pays);
-
   return { pays, ...others };
 };
 

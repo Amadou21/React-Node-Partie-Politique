@@ -13,39 +13,31 @@ import {
   Stack,
   Grid,
   CardHeader,
-  // requirePropFactory,
 } from "@mui/material";
 import { Avatar, Chip } from "@mui/material";
 import { usePays } from "../Services/PaysServices/pays.store";
+// import bureau.jpg from "../"
 
 const MembreRecherche = () => {
-  var { pays } = usePays();
-  console.log("pays", pays);
-  const pays2 = [
+  const { pays } = usePays()
+  /*const pays = [
     { libellePays: "Mali" },
     { libellePays: "Guinee" },
     { libellePays: "Congo" },
     { libellePays: "Burkina" },
-  ];
-  console.log(pays.length);
-  if (pays.length == 0) {
-    // alert("pays_length", pays);
-    pays = { ...pays2 };
-    console.log("pays", pays);
-  }
+  ];*/
   const type = [{ libellePays: "National" }, { libellePays: "Regional" }];
   const region = [{ libellePays: "Kayes" }, { libellePays: "Koulikoro" }];
   const localite = [{ libellePays: "Kayes" }, { libellePays: "Koulikoro" }];
 
-  const options = (param) => {
+  const options = (param) =>
     param.map((option) => {
-      const firstLetter = option.libellePays[0].toUpperCase(); //option.label[0].toUpperCase();
+      const firstLetter = option.libellePays[0].toUpperCase();
       return {
         firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
         ...option,
       };
     });
-  };
 
   return (
     <AppLayout>
@@ -59,7 +51,7 @@ const MembreRecherche = () => {
                   (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
                 )}
                 groupBy={(option) => option.firstLetter}
-                getOptionLabel={(option) => option.label}
+                getOptionLabel={(option) => option.libellePays}
                 sx={{ minWidth: 300 }}
                 renderInput={(params) => <TextField {...params} label="Pays" />}
               />
@@ -71,7 +63,7 @@ const MembreRecherche = () => {
                   (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
                 )}
                 groupBy={(option) => option.firstLetter}
-                getOptionLabel={(option) => option.label}
+                getOptionLabel={(option) => option.libellePays}
                 sx={{ minWidth: 300 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Type de Bureau" />
@@ -85,7 +77,7 @@ const MembreRecherche = () => {
                   (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
                 )}
                 groupBy={(option) => option.firstLetter}
-                getOptionLabel={(option) => option.label}
+                getOptionLabel={(option) => option.libellePays}
                 sx={{ minWidth: 300 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Region du bureau" />
@@ -99,7 +91,7 @@ const MembreRecherche = () => {
                   (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
                 )}
                 groupBy={(option) => option.firstLetter}
-                getOptionLabel={(option) => option.label}
+                getOptionLabel={(option) => option.libellePays}
                 sx={{ minWidth: 300 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Les differentes localitée" />
@@ -125,7 +117,6 @@ const MembreRecherche = () => {
               <Typography variant="body2" color="text.secondary">
                 Lizards are a widespread group of squamate reptiles, with over
                 6,000 species, ranging across all continents except Antarctica
-                j'espère que personne ne va traduire ceux-ci
               </Typography>
             </Box>
           </Box>

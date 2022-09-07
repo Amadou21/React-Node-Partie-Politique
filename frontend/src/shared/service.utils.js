@@ -8,11 +8,7 @@ const path =
 const crud = (urlBase) => (entityName) => {
   const entityUrl = path(urlBase)(entityName);
   return {
-    findAll: () => {
-      alert("trouver");
-      fetch(entityUrl).then((res) => res.json());
-      alert("trouver apres fetch");
-    },
+    findAll: () => fetch(entityUrl).then((res) => res.json()),
     findById: (id) => fetch(entityUrl + id).then((res) => res.json()),
     destroy: async (id) => {
       await fetch(entityUrl + id, { method: "DELETE" });
