@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { hasAuthenticated } from "../Features/Membres/Services/User.service";
 
 export const AuthContext = createContext({
