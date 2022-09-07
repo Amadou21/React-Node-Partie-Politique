@@ -1,4 +1,4 @@
-// const bureaus = require('./bureau.data');
+// const bureaux = require('./bureau.data');
 const { BureauModel } = require("./bureau.model");
 
 const create = async (bureau) => {
@@ -7,8 +7,8 @@ const create = async (bureau) => {
 };
 
 const findAll = async () => {
-  const bureaus = await BureauModel.findAll();
-  return bureaus;
+  const bureaux = await BureauModel.findAll();
+  return bureaux;
 };
 
 const findById = async (id) => {
@@ -26,9 +26,9 @@ const destroy = async (id) => {
 };
 
 const findByType = async (type) => {
-  const bureaus = await BureauModel.findAll({ where: { idType: type } });
-  console.log({ bureaus });
-  return bureaus;
+  const bureaux = await BureauModel.findAll({ where: { idType: type } });
+  console.log({ bureaux });
+  return bureaux;
 };
 
 module.exports = {

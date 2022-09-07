@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const service = require("./bureau.service");
 
-const path = "/bureaus";
+const path = "/bureaux";
 
 const create = async (req, res) => {
   let bureau = req.body;
@@ -11,8 +11,8 @@ const create = async (req, res) => {
 };
 
 const findAll = async (req, res) => {
-  const bureaus = await service.findAll();
-  res.json(bureaus);
+  const bureaux = await service.findAll();
+  res.json(bureaux);
 };
 
 const findById = async (req, res) => {

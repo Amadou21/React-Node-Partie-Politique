@@ -13,30 +13,39 @@ import {
   Stack,
   Grid,
   CardHeader,
-  requirePropFactory,
+  // requirePropFactory,
 } from "@mui/material";
 import { Avatar, Chip } from "@mui/material";
-// import bureau.jpg from "../"
+import { usePays } from "../Services/PaysServices/pays.store";
 
 const MembreRecherche = () => {
-  const pays = [
-    { label: "Mali" },
-    { label: "Guinee" },
-    { label: "Congo" },
-    { label: "Burkina" },
+  var { pays } = usePays();
+  console.log("pays", pays);
+  const pays2 = [
+    { libellePays: "Mali" },
+    { libellePays: "Guinee" },
+    { libellePays: "Congo" },
+    { libellePays: "Burkina" },
   ];
+  console.log(pays.length);
+  if (pays.length == 0) {
+    // alert("pays_length", pays);
+    pays = { ...pays2 };
+    console.log("pays", pays);
+  }
   const type = [{ label: "National" }, { label: "Regional" }];
   const region = [{ label: "Kayes" }, { label: "Koulikoro" }];
   const localite = [{ label: "Kayes" }, { label: "Koulikoro" }];
 
-  const options = (param) =>
+  const options = (param) => {
     param.map((option) => {
-      const firstLetter = option.label[0].toUpperCase();
+      const firstLetter = option.libellePays[0].toUpperCase(); //option.label[0].toUpperCase();
       return {
         firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
         ...option,
       };
     });
+  };
 
   return (
     <AppLayout>
@@ -116,6 +125,7 @@ const MembreRecherche = () => {
               <Typography variant="body2" color="text.secondary">
                 Lizards are a widespread group of squamate reptiles, with over
                 6,000 species, ranging across all continents except Antarctica
+                j'espère que personne ne va traduire ceux-ci
               </Typography>
             </Box>
           </Box>
