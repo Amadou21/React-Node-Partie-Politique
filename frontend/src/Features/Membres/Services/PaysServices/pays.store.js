@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "react-query";
+import { useQuery } from "react-query";
 import { findAll, findById, destroy, create, update } from "./pays.services";
 import {
   useCreate as _useCreate,
