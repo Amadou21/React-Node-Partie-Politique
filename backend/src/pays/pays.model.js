@@ -4,7 +4,7 @@ const PaysModel = sequelize.define(
   "PaysModel",
   {
     idPays: { type: Sequelize.BIGINT, primaryKey: true, autoIncrement: true },
-    libelle: { type: Sequelize.STRING },
+    libellePays: { type: Sequelize.STRING },
   },
   {
     ...defaultOptions,
