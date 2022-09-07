@@ -33,9 +33,9 @@ const MembreRecherche = () => {
     pays = { ...pays2 };
     console.log("pays", pays);
   }
-  const type = [{ label: "National" }, { label: "Regional" }];
-  const region = [{ label: "Kayes" }, { label: "Koulikoro" }];
-  const localite = [{ label: "Kayes" }, { label: "Koulikoro" }];
+  const type = [{ libellePays: "National" }, { libellePays: "Regional" }];
+  const region = [{ libellePays: "Kayes" }, { libellePays: "Koulikoro" }];
+  const localite = [{ libellePays: "Kayes" }, { libellePays: "Koulikoro" }];
 
   const options = (param) => {
     param.map((option) => {
