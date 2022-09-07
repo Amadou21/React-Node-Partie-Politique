@@ -179,12 +179,13 @@ const AppLayout = ({ children }) => {
               ))}
               {!auth &&
                 connexion.map((page) => (
-                  <MenuItem
+                  <Button
                     key={page.label}
                     onClick={() => navigate(page.link)}
+                    sx={{ my: 2, color: "white", display: "block" }}
                   >
-                    <Typography textAlign="center">{page.label}</Typography>
-                  </MenuItem>
+                    {page.label}
+                  </Button>
                 ))}
               {auth &&
                 membres.map((page) => (
