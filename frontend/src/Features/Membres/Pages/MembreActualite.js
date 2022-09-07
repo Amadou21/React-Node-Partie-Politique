@@ -1,12 +1,16 @@
 import React from 'react';
 import AppLayout from '../../Layout/AppLayout';
+import { useAuthContext } from "../../../Context/AuthContext";
 
 const MembreActualite = () => {
+    const { auth } = useAuthContext();
     return (
         <AppLayout>
-        <div>
+        {auth && (
+            <div>
             <h1>Membre Actu</h1>
         </div>
+        )}
         </AppLayout>
     );
 };

@@ -1,5 +1,4 @@
 import { crudLocalhost, urlBase } from "../../../shared/service.utils";
-//import jwt from 'jsonwebtoken';
 
 const entityName = "users/";
 
@@ -24,19 +23,16 @@ export const find = async ({ ...data }) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   }).then((res) => res.json());
-  console.log(token);
   if (response.ok) {
     addToken("token", token);
-    addToken("id", idUser);
+    addToken("idUser", idUser);
   }
   return response;
 };
-export const isAuth = async ({ ...token }) => {
-  const resp = await fetch(urlBase + entityName + "auth/" + token, {
-    method: "GET",
-    headers: { authorization: "bearers " + token },
-    body: JSON.stringify(token),
-  });
+export const isAuth = async (token) => {
+  const resp = await fetch(urlBase + entityName + "auth/" + token);
+  console.log("Token de isAuth", token);
+  console.log("isAuth resp: ", resp);
   return resp;
 };
 
@@ -45,23 +41,17 @@ function addToken(nom, valeur) {
   localStorage.setItem(nom, valeur);
 }
 
-export function hasAuthenticated() {
+export const hasAuthenticated = async () => {
   const token = window.localStorage.getItem("token");
-  const result = isAuth(token);
-  if (false === result.ok) {
+  const result = await isAuth(token);
+  console.log("hasauthenticated", result);
+  if (result.length > 0) {
+    console.log("result.length", result.length);
     localStorage.removeItem("token");
   }
   return result;
-}
+};
 
-/*function tokenIsValid(token) {
-    const { exp: expiration } = jwt.decode(token);
-
-    if (expiration * 1000 > new Date().getTime()) {
-        return true;
-    }
-    return false;
-}*/
 const path =
   (urlBase) =>
   (operation = "") =>

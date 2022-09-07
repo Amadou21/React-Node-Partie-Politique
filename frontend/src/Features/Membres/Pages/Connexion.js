@@ -15,6 +15,7 @@ import {
 import styled from "@emotion/styled";
 import LoginForm from "../Components/LoginForm";
 import AppLayout from "../../Layout/AppLayout";
+import { useAuthContext } from "../../../Context/AuthContext";
 
 //////////////////////////////////
 const RootStyle = styled(Box)({
@@ -56,6 +57,7 @@ const fadeInUp = {
 };
 const Connexion = () => {
   const [open, setOpen] = React.useState(false);
+  const { auth } = useAuthContext();
 
   const handleClickOpen = () => {
     setOpen(true);
