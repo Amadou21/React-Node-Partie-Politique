@@ -6,6 +6,9 @@ const BureauModel = sequelize.define(
     idBureau: { type: Sequelize.BIGINT, primaryKey: true, autoIncrement: true },
     libelleBureau: { type: Sequelize.STRING },
     description: { type: Sequelize.STRING },
+    // -----------------------------------------------------------
+    photoBureau: { type: Sequelize.STRING },
+    // -----------------------------------------------------------
     idLocalite: { type: Sequelize.BIGINT },
     idType: { type: Sequelize.BIGINT },
     idTMandat: { type: Sequelize.BIGINT },

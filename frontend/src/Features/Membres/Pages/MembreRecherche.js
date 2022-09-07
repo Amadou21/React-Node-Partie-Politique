@@ -13,25 +13,26 @@ import {
   Stack,
   Grid,
   CardHeader,
-  requirePropFactory,
 } from "@mui/material";
 import { Avatar, Chip } from "@mui/material";
+import { usePays } from "../Services/PaysServices/pays.store";
 // import bureau.jpg from "../"
 
 const MembreRecherche = () => {
-  const pays = [
-    { label: "Mali" },
-    { label: "Guinee" },
-    { label: "Congo" },
-    { label: "Burkina" },
-  ];
-  const type = [{ label: "National" }, { label: "Regional" }];
-  const region = [{ label: "Kayes" }, { label: "Koulikoro" }];
-  const localite = [{ label: "Kayes" }, { label: "Koulikoro" }];
+  const { pays } = usePays()
+  /*const pays = [
+    { libellePays: "Mali" },
+    { libellePays: "Guinee" },
+    { libellePays: "Congo" },
+    { libellePays: "Burkina" },
+  ];*/
+  const type = [{ libellePays: "National" }, { libellePays: "Regional" }];
+  const region = [{ libellePays: "Kayes" }, { libellePays: "Koulikoro" }];
+  const localite = [{ libellePays: "Kayes" }, { libellePays: "Koulikoro" }];
 
   const options = (param) =>
     param.map((option) => {
-      const firstLetter = option.label[0].toUpperCase();
+      const firstLetter = option.libellePays[0].toUpperCase();
       return {
         firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
         ...option,
@@ -50,7 +51,7 @@ const MembreRecherche = () => {
                   (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
                 )}
                 groupBy={(option) => option.firstLetter}
-                getOptionLabel={(option) => option.label}
+                getOptionLabel={(option) => option.libellePays}
                 sx={{ minWidth: 300 }}
                 renderInput={(params) => <TextField {...params} label="Pays" />}
               />
@@ -62,7 +63,7 @@ const MembreRecherche = () => {
                   (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
                 )}
                 groupBy={(option) => option.firstLetter}
-                getOptionLabel={(option) => option.label}
+                getOptionLabel={(option) => option.libellePays}
                 sx={{ minWidth: 300 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Type de Bureau" />
@@ -76,7 +77,7 @@ const MembreRecherche = () => {
                   (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
                 )}
                 groupBy={(option) => option.firstLetter}
-                getOptionLabel={(option) => option.label}
+                getOptionLabel={(option) => option.libellePays}
                 sx={{ minWidth: 300 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Region du bureau" />
@@ -90,7 +91,7 @@ const MembreRecherche = () => {
                   (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
                 )}
                 groupBy={(option) => option.firstLetter}
-                getOptionLabel={(option) => option.label}
+                getOptionLabel={(option) => option.libellePays}
                 sx={{ minWidth: 300 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Les differentes localitée" />
