@@ -19,8 +19,11 @@ const pages = [
   { label: "Accueil", link: "/" },
   { label: "Projet", link: "/projet" },
   { label: "Actualités", link: "/actualites" },
-  //Perso ------------------------------------------------------
+];
+const connexion = [
   { label: "Connexion", link: "/connexion" },
+];
+const membres = [
   { label: "Actualite des membres", link: "/membre-actualites" },
   { label: "Recherche", link: "/membre-recherche" },
 ];
@@ -57,7 +60,7 @@ const AppLayout = ({ children }) => {
         navigate("/tableauDeBord");
         break;
       case "Déconnexion":
-        navigate("/");
+        navigate("/connexion");
         break;
       case "Profil":
         navigate("/userProfil/1");
@@ -128,6 +131,22 @@ const AppLayout = ({ children }) => {
                     <Typography textAlign="center">{page.label}</Typography>
                   </MenuItem>
                 ))}
+                {!auth && connexion.map((page) => (
+                  <MenuItem
+                    key={page.label}
+                    onClick={() => navigate(page.link)}
+                  >
+                    <Typography textAlign="center">{page.label}</Typography>
+                  </MenuItem>
+                ))}
+                {auth && membres.map((page) => (
+                  <MenuItem
+                    key={page.label}
+                    onClick={() => navigate(page.link)}
+                  >
+                    <Typography textAlign="center">{page.label}</Typography>
+                  </MenuItem>
+                ))}
               </Menu>
             </Box>
             <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
@@ -159,6 +178,14 @@ const AppLayout = ({ children }) => {
                   {page.label}
                 </Button>
               ))}
+              {auth && membres.map((page) => (
+                  <MenuItem
+                    key={page.label}
+                    onClick={() => navigate(page.link)}
+                  >
+                    <Typography textAlign="center">{page.label}</Typography>
+                  </MenuItem>
+                ))}
             </Box>
             {auth && (
               <Box sx={{ flexGrow: 0 }}>

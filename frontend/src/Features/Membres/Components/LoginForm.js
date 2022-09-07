@@ -28,7 +28,7 @@ const animate = {
 };
 
 const LoginForm = ({ handleClickOpen }) => {
-  const { setAuth, auth } = useAuthContext();
+  const { handleAuth } = useAuthContext();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -56,15 +56,19 @@ const LoginForm = ({ handleClickOpen }) => {
       const response = await find(user);
       if (response.ok) {
         console.log("la reponse est a ok :", response.ok);
-        setAuth(false);
+        const token = localStorage.getItem("token");
+        const idUser = +localStorage.getItem("idUser");
+        handleAuth(token, idUser);
         handleClickVariant("Vous etes connecté(e) avec succès", "success");
         navigate("/membre-actualites");
-        console.log("auth", auth);
+        console.log("token : ", token);
+        console.log("id : ", idUser);
       } else {
         console.log("la reponse nest pas ok :", response.ok);
         handleClickOpen();
       }
       console.log("data :", response);
+      console.log("data body :");
     },
   });
 
