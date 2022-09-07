@@ -10,7 +10,8 @@ const create = async (req, res) => {
   user = await service.create(user);
   if (user !== null) {
     let token = jwt.sign(user.idUser, "cHJvamV0LXJlYWN0");
-    res.status(200).json({ token });
+    let idUser = user.idUser;
+    res.status(200).json({ idUser, token });
   } else {
     res.status(401).json("Une erreur est survenu");
   }

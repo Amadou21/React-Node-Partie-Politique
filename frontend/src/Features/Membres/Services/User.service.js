@@ -7,9 +7,10 @@ export const { findAll, findById, destroy, create, update } =
 
 export const create2 = async (data) => {
   const resp = await create(data).then((res) => res.json());
+  const { token, idUser } = resp;
   console.log("token", resp);
-  const { token } = resp;
   addToken("token", token);
+  addToken("idUser", idUser);
 };
 
 export const find = async ({ ...data }) => {
