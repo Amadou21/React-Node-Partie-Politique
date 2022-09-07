@@ -15,6 +15,7 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffICon from "@mui/icons-material/VisibilityOff";
 import { create2, findLogin } from "../Services/User.service";
 import { useSnackbar } from "notistack";
+import { useAuthContext } from "../../../Context/AuthContext";
 
 /////////////////////////////////////////////////////////////
 
@@ -33,13 +34,13 @@ const SignupForm = ({ setAuth }) => {
   // les hooks
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const { auth, handleAuth } = useAuthContext();
 
   const handleClickVariant = (message, variant) => {
     // variant could be success, error, warning, info, or default
     enqueueSnackbar(message + " ", { variant });
   };
-
-  const [showPassword, setShowPassword] = useState(false);
 
   const SignupSchema = Yup.object().shape({
     prenom: Yup.string()
@@ -67,12 +68,12 @@ const SignupForm = ({ setAuth }) => {
       if (le_login.ok) {
         handleClickVariant("Cet email existe déjà", "error");
       } else {
-        setTimeout(() => {
-          create2(user);
-          setAuth = true;
-          handleClickVariant("Votre compte a été creer avec succès", "success");
-          navigate("/membre-actualites");
-        }, 2000);
+        create2(user);
+        const token = localStorage.getItem("token");
+        const idUser = +localStorage.getItem("idUser");
+        handleAuth(token, idUser);
+        handleClickVariant("Votre compte a été creer avec succès", "success");
+        navigate("/membre-actualites");
       }
     },
   });
