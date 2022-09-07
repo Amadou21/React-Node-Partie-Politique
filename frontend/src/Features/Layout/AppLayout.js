@@ -19,6 +19,8 @@ const pages = [
   { label: "Accueil", link: "/" },
   { label: "Projet", link: "/projet" },
   { label: "Actualités", link: "/actualites" },
+];
+const connexion = [
   { label: "Connexion", link: "/connexion" },
 ];
 const membres = [
@@ -58,7 +60,7 @@ const AppLayout = ({ children }) => {
         navigate("/tableauDeBord");
         break;
       case "Déconnexion":
-        navigate("/");
+        navigate("/connexion");
         break;
       case "Profil":
         navigate("/userProfil/1");
@@ -122,6 +124,14 @@ const AppLayout = ({ children }) => {
                 }}
               >
                 {pages.map((page) => (
+                  <MenuItem
+                    key={page.label}
+                    onClick={() => navigate(page.link)}
+                  >
+                    <Typography textAlign="center">{page.label}</Typography>
+                  </MenuItem>
+                ))}
+                {!auth && connexion.map((page) => (
                   <MenuItem
                     key={page.label}
                     onClick={() => navigate(page.link)}

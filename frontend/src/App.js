@@ -25,14 +25,8 @@ const App = () => {
   ];
 
   const routesMembre = [
-    {
-      link: "/membre-actualites",
-      element: auth ? <MembreActualite /> : <Accueil />,
-    },
-    {
-      link: "/membre-recherche",
-      element: auth ? <MembreRecherche /> : <Accueil />,
-    },
+    { link: "/membre-actualites", element: <MembreActualite /> },
+    { link: "/membre-recherche", element: <MembreRecherche /> },
   ];
 
   const routesUser = [
