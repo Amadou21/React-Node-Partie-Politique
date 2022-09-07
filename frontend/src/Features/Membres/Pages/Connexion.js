@@ -57,7 +57,7 @@ const fadeInUp = {
 };
 const Connexion = () => {
   const [open, setOpen] = React.useState(false);
-  const { auth } = useAuthContext();
+  const { auth, handleLogOut } = useAuthContext();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -69,6 +69,7 @@ const Connexion = () => {
 
   return (
     <AppLayout>
+      {auth && handleLogOut()}
       <RootStyle sx={{ ml: 0 }}>
         <Container maxWidth="sm">
           <ContentStyle>
