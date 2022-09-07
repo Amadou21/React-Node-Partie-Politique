@@ -13,7 +13,7 @@ const MembreActualite = () => {
     if (!auth) {
       navigate("/connexion");
     }
-  }, []);
+  }, [auth, navigate]);
   return (
     <AppLayout>
       {!auth && <CircularProgress />}
