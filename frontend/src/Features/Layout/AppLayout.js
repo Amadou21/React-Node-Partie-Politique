@@ -20,9 +20,7 @@ const pages = [
   { label: "Projet", link: "/projet" },
   { label: "Actualités", link: "/actualites" },
 ];
-const connexion = [
-  { label: "Connexion", link: "/connexion" },
-];
+const connexion = [{ label: "Connexion", link: "/connexion" }];
 const membres = [
   { label: "Actualite des membres", link: "/membre-actualites" },
   { label: "Recherche", link: "/membre-recherche" },
@@ -51,7 +49,6 @@ const AppLayout = ({ children }) => {
   };
 
   const handleRedirection = (setting) => {
-
     switch (setting) {
       case "Compte":
         navigate("/userDetail/1");
@@ -131,22 +128,24 @@ const AppLayout = ({ children }) => {
                     <Typography textAlign="center">{page.label}</Typography>
                   </MenuItem>
                 ))}
-                {!auth && connexion.map((page) => (
-                  <MenuItem
-                    key={page.label}
-                    onClick={() => navigate(page.link)}
-                  >
-                    <Typography textAlign="center">{page.label}</Typography>
-                  </MenuItem>
-                ))}
-                {auth && membres.map((page) => (
-                  <MenuItem
-                    key={page.label}
-                    onClick={() => navigate(page.link)}
-                  >
-                    <Typography textAlign="center">{page.label}</Typography>
-                  </MenuItem>
-                ))}
+                {!auth &&
+                  connexion.map((page) => (
+                    <MenuItem
+                      key={page.label}
+                      onClick={() => navigate(page.link)}
+                    >
+                      <Typography textAlign="center">{page.label}</Typography>
+                    </MenuItem>
+                  ))}
+                {auth &&
+                  membres.map((page) => (
+                    <MenuItem
+                      key={page.label}
+                      onClick={() => navigate(page.link)}
+                    >
+                      <Typography textAlign="center">{page.label}</Typography>
+                    </MenuItem>
+                  ))}
               </Menu>
             </Box>
             <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
@@ -178,7 +177,17 @@ const AppLayout = ({ children }) => {
                   {page.label}
                 </Button>
               ))}
-              {auth && membres.map((page) => (
+              {!auth &&
+                connexion.map((page) => (
+                  <MenuItem
+                    key={page.label}
+                    onClick={() => navigate(page.link)}
+                  >
+                    <Typography textAlign="center">{page.label}</Typography>
+                  </MenuItem>
+                ))}
+              {auth &&
+                membres.map((page) => (
                   <MenuItem
                     key={page.label}
                     onClick={() => navigate(page.link)}
@@ -189,40 +198,43 @@ const AppLayout = ({ children }) => {
             </Box>
             {auth && (
               <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {settings.map((setting) => (
-                  <MenuItem
-                    key={setting}
-                    onClick={() => {
-                      handleCloseUserMenu();
-                      handleRedirection(setting);
-                    }}
-                  >
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar
+                      alt="Remy Sharp"
+                      src="/static/images/avatar/2.jpg"
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {settings.map((setting) => (
+                    <MenuItem
+                      key={setting}
+                      onClick={() => {
+                        handleCloseUserMenu();
+                        handleRedirection(setting);
+                      }}
+                    >
+                      <Typography textAlign="center">{setting}</Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
             )}
           </Toolbar>
         </Container>
