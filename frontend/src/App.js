@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { useAuthContext } from "./Context/AuthContext";
+import AuthProvider, { useAuthContext } from "./Context/AuthContext";
 import Accueil from "./Features/Accueil/Accueil";
 import Actualites from "./Features/Accueil/Actualites";
 import Projet from "./Features/Accueil/Projet";
@@ -25,8 +25,6 @@ const App = () => {
   ];
 
   const routesMembre = [
-    { link: "/connexion", element: <Connexion /> },
-    { link: "/inscription", element: <Inscription /> },
     { link: "/membre-actualites", element: <MembreActualite /> },
     { link: "/membre-recherche", element: <MembreRecherche /> },
   ];
@@ -39,27 +37,29 @@ const App = () => {
   ];
 
   return (
-    <BrowserRouter>
-      <Routes>
-        {routes.map((route) => (
-          <Route key={route.link} path={route.link} element={route.element} />
-        ))}
-        {routesMembre.map((route) => (
-          <Route
-            key={route.link}
-            path={route.link}
-            element={auth ? <MembreActualite /> : route.element}
-          />
-        ))}
-        {routesUser.map((route) => (
-          <Route
-            key={route.link}
-            path={route.link}
-            element={auth ? <MembreActualite /> : route.element}
-          />
-        ))}
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          {routes.map((route) => (
+            <Route key={route.link} path={route.link} element={route.element} />
+          ))}
+          {routesMembre.map((route) => (
+            <Route
+              key={route.link}
+              path={route.link}
+              element={auth ? <MembreActualite /> : route.element}
+            />
+          ))}
+          {routesUser.map((route) => (
+            <Route
+              key={route.link}
+              path={route.link}
+              element={auth ? <MembreActualite /> : route.element}
+            />
+          ))}
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 };
 export default App;
