@@ -17,7 +17,7 @@ import { LoadingButton } from "@mui/lab";
 import { motion } from "framer-motion";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffICon from "@mui/icons-material/VisibilityOff";
-import { find } from "../Services/User.service";
+import { find } from "../Services/UserServices/User.service";
 import { useSnackbar } from "notistack";
 
 let easing = [0.6, -0.05, 0.01, 0.99];

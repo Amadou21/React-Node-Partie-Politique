@@ -16,19 +16,25 @@ import {
 } from "@mui/material";
 import { Avatar, Chip } from "@mui/material";
 import { usePays } from "../Services/PaysServices/pays.store";
-// import bureau.jpg from "../"
+import { useType } from "../Services/TypeServices/type.store";
+import { useRegion } from "../Services/RegionServices/region.store";
+import { useLocalite } from "../Services/LocaliteServices/localite.store";
+import { optionsLocalite, optionsType, optionsRegion } from "./Module";
 
 const MembreRecherche = () => {
-  const { pays } = usePays()
+  const { pays } = usePays();
+  const { types } = useType();
+  const { region } = useRegion();
+  const { localite } = useLocalite();
   /*const pays = [
     { libellePays: "Mali" },
     { libellePays: "Guinee" },
     { libellePays: "Congo" },
     { libellePays: "Burkina" },
   ];*/
-  const type = [{ libellePays: "National" }, { libellePays: "Regional" }];
-  const region = [{ libellePays: "Kayes" }, { libellePays: "Koulikoro" }];
-  const localite = [{ libellePays: "Kayes" }, { libellePays: "Koulikoro" }];
+  // const type = [{ libellePays: "National" }, { libellePays: "Regional" }];
+  // const region = [{ libellePays: "Kayes" }, { libellePays: "Koulikoro" }];
+  // const localite = [{ libellePays: "Kayes" }, { libellePays: "Koulikoro" }];
 
   const options = (param) =>
     param.map((option) => {
@@ -38,6 +44,33 @@ const MembreRecherche = () => {
         ...option,
       };
     });
+
+  // const optionsType = (param) =>
+  //   param.map((option) => {
+  //     const firstLetter = option.libelleType[0].toUpperCase();
+  //     return {
+  //       firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
+  //       ...option,
+  //     };
+  //   });
+
+  // const optionsRegion = (param) =>
+  //   param.map((option) => {
+  //     const firstLetter = option.libelleRegion[0].toUpperCase();
+  //     return {
+  //       firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
+  //       ...option,
+  //     };
+  //   });
+
+  // const optionsLocalite = (param) =>
+  //   param.map((option) => {
+  //     const firstLetter = option.libelleLocalite[0].toUpperCase();
+  //     return {
+  //       firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
+  //       ...option,
+  //     };
+  //   });
 
   return (
     <AppLayout>
@@ -59,25 +92,25 @@ const MembreRecherche = () => {
             <Grid item xs={12} md={6} sm={6} lg={3}>
               <Autocomplete
                 id="grouped-demo"
-                options={options(type).sort(
+                options={optionsType(types).sort(
                   (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
                 )}
                 groupBy={(option) => option.firstLetter}
-                getOptionLabel={(option) => option.libellePays}
+                getOptionLabel={(option) => option.libelleType}
                 sx={{ minWidth: 300 }}
                 renderInput={(params) => (
-                  <TextField {...params} label="Type de Bureau" />
+                  <TextField {...params} label="types de Bureau" />
                 )}
               />
             </Grid>
             <Grid item xs={12} md={6} sm={6} lg={3}>
               <Autocomplete
                 id="grouped-demo"
-                options={options(region).sort(
+                options={optionsRegion(region).sort(
                   (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
                 )}
                 groupBy={(option) => option.firstLetter}
-                getOptionLabel={(option) => option.libellePays}
+                getOptionLabel={(option) => option.libelleRegion}
                 sx={{ minWidth: 300 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Region du bureau" />
@@ -87,11 +120,11 @@ const MembreRecherche = () => {
             <Grid item xs={12} md={6} sm={6} lg={3}>
               <Autocomplete
                 id="grouped-demo"
-                options={options(localite).sort(
+                options={optionsLocalite(localite).sort(
                   (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
                 )}
                 groupBy={(option) => option.firstLetter}
-                getOptionLabel={(option) => option.libellePays}
+                getOptionLabel={(option) => option.libelleLocalite}
                 sx={{ minWidth: 300 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Les differentes localitée" />

@@ -1,4 +1,4 @@
-import { crudLocalhost, urlBase } from "../../../shared/service.utils";
+import { crudLocalhost, urlBase } from "../../../../shared/service.utils";
 
 const entityName = "users/";
 
