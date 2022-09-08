@@ -8,7 +8,7 @@ const TypeModel = sequelize.define(
   },
   {
     ...defaultOptions,
-    tableName: "region",
+    tableName: "type",
   }
 );
 

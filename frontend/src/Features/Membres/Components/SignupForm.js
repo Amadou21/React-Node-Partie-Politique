@@ -13,7 +13,7 @@ import { LoadingButton } from "@mui/lab";
 import { motion } from "framer-motion";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffICon from "@mui/icons-material/VisibilityOff";
-import { create2, findLogin } from "../Services/User.service";
+import { create2, findLogin } from "../Services/UserServices/User.service";
 import { useSnackbar } from "notistack";
 import { useAuthContext } from "../../../Context/AuthContext";
 
@@ -35,7 +35,7 @@ const SignupForm = ({ setAuth }) => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const { auth, handleAuth } = useAuthContext();
+  const { handleAuth } = useAuthContext();
 
   const handleClickVariant = (message, variant) => {
     // variant could be success, error, warning, info, or default

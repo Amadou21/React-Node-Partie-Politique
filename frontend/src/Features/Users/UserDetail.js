@@ -18,7 +18,10 @@ import * as Yup from "yup";
 import { useFormik, Form, FormikProvider } from "formik";
 import { LoadingButton } from "@mui/lab";
 import { motion } from "framer-motion";
-import { create, findLogin } from "../Membres/Services/User.service";
+import {
+  create,
+  findLogin,
+} from "../Membres/Services/UserServices/User.service";
 import { useSnackbar } from "notistack";
 
 let easing = [0.6, -0.05, 0.01, 0.99];

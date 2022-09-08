@@ -1,27 +1,27 @@
 import { useQuery } from "react-query";
-import { findAll, findById, destroy, create, update } from "./bureau.services";
+import { findAll, findById, destroy, create, update } from "./type.services";
 import {
   useCreate as _useCreate,
   useDelete as _useDelete,
   useUpdate as _useUpdate,
-} from "../../../shared/store";
+} from "../../../../shared/store";
 
-const entity = "bureaux";
+const entity = "type";
 
-export const useBureaux = () => {
+export const useType = () => {
   const { data, refetch, ...others } = useQuery([entity, "findAll"], findAll, {
     refetchInterval: 2_000,
   });
-  let bureaux = data || [];
-  return { bureaux, ...others };
+  let types = data || [];
+  return { types, ...others };
 };
 
-export const useBureauById = (id) => {
+export const useTypeById = (id) => {
   const { data, ...others } = useQuery([entity, "findById"], () =>
     findById(id)
   );
-  let bureau = data || [];
-  return { bureau, ...others };
+  let type = data || [];
+  return { type, ...others };
 };
 
 /*export const useUserByLogin = (login, motDePass) => {
@@ -34,7 +34,7 @@ export const useCreate = () => _useCreate(create);
 export const useDelete = () => _useDelete(destroy);
 export const useUpdate = () => _useUpdate(update);
 
-// export const useBureaurByLogin = () => {
+// export const useTyperByLogin = () => {
 //   const { mutateAsync, ...others } = useMutation(find, {
 //     onMutate: (variables) => {
 //       console.log("onMutate", { variables });
