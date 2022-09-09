@@ -4,7 +4,7 @@ import {
   useCreate as _useCreate,
   useDelete as _useDelete,
   useUpdate as _useUpdate,
-} from "../../../shared/store";
+} from "../../../../shared/store";
 
 const entity = "bureaux";
 
