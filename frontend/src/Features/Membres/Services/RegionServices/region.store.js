@@ -12,8 +12,8 @@ export const useRegion = () => {
   const { data, refetch, ...others } = useQuery([entity, "findAll"], findAll, {
     refetchInterval: 2_000,
   });
-  let region = data || [];
-  return { region, ...others };
+  let regions = data || [];
+  return { regions, ...others };
 };
 
 export const useRegionById = (id) => {

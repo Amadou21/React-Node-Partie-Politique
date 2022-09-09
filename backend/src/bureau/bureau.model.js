@@ -11,7 +11,7 @@ const BureauModel = sequelize.define(
     // -----------------------------------------------------------
     idLocalite: { type: Sequelize.BIGINT },
     idType: { type: Sequelize.BIGINT },
-    idTMandat: { type: Sequelize.BIGINT },
+    idMandat: { type: Sequelize.BIGINT },
   },
   {
     ...defaultOptions,
