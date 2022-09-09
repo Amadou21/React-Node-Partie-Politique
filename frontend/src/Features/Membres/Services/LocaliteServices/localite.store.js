@@ -18,8 +18,8 @@ export const useLocalite = () => {
   const { data, refetch, ...others } = useQuery([entity, "findAll"], findAll, {
     refetchInterval: 2_000,
   });
-  let localite = data || [];
-  return { localite, ...others };
+  let localites = data || [];
+  return { localites, ...others };
 };
 
 export const useLocaliteById = (id) => {
