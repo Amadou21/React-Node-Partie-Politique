@@ -5,31 +5,37 @@ import {
   destroy,
   create,
   update,
-  find,
-} from "./User.service";
+  // find,
+} from "./membre.service";
 import {
   useCreate as _useCreate,
   useDelete as _useDelete,
   useUpdate as _useUpdate,
 } from "../../../../shared/store";
 
-const entity = "users";
+const entity = "membres";
 
-export const useUsers = () => {
+export const useMembres = () => {
   const { data, refetch, ...others } = useQuery([entity, "findAll"], findAll, {
     refetchInterval: 2_000,
   });
-  let users = data || [];
-  return { users, ...others };
+  let membres = data || [];
+  return { membres, ...others };
 };
 
-export const useUserById = (id) => {
+export const useMembreById = (id) => {
   const { data, ...others } = useQuery([entity, "findById"], () =>
     findById(id)
   );
-  let user = data || [];
-  return { user, ...others };
+  let membre = data || [];
+  return { membre, ...others };
 };
+
+/*export const useMembreByLogin = (login, motDePass) => {
+    const { data, ...others } = useQuery([entity, "findByLogin"], () => find(login, motDePass));
+    let membre = data;
+    return { membre, ...others };
+}*/
 
 export const useCreate = () => _useCreate(create);
 
@@ -37,7 +43,7 @@ export const useDelete = () => _useDelete(destroy);
 
 export const useUpdate = () => _useUpdate(update);
 
-// export const useUserByLogin = () => {
+// export const useMembreByLogin = () => {
 //   const { mutateAsync, ...others } = useMutation(find, {
 //     onMutate: (variables) => {
 //       console.log("onMutate", { variables });

@@ -9,7 +9,7 @@ import { SnackbarProvider } from "notistack";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 10_000,
+      staleTime: 200_000,
       refetchOnWindowFocus: true,
     },
   },

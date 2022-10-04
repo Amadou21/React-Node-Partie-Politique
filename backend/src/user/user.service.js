@@ -14,12 +14,19 @@ const findAll = async () => {
 
 const findById = async (id) => {
   const user = await UserModel.findOne({ where: { idUser: id } });
-  console.log({ user });
+  // console.log({ user });
   return user;
 };
 
 const update = async (id, user) => {
   await UserModel.update(user, { where: { idUser: id } });
+};
+
+const updatePhoto = async (id, user) => {
+  await UserModel.update(
+    { photoUser: user.photoUser },
+    { where: { idUser: id } }
+  );
 };
 
 const destroy = async (id) => {
@@ -40,7 +47,7 @@ const findLogin = async (login) => {
   const user = await UserModel.findOne({
     where: { login: login },
   });
-  console.log("user backend", { user });
+  // console.log("user backend", { user });
   return user;
 };
 
@@ -59,6 +66,7 @@ module.exports = {
   findById,
   create,
   update,
+  updatePhoto,
   destroy,
   find,
   findLogin,

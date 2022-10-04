@@ -1,6 +1,23 @@
 const { Router } = require("express");
 const service = require("./user.service");
 let jwt = require("jsonwebtoken");
+const fs = require("fs").promises;
+
+const multer = require("multer");
+
+var storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+    // cb(null, "http://localhost:3001/users/1");
+  },
+  filename: (req, file, cb) => {
+    const parts = file.originalname.split(".");
+    const extension = parts[parts.length - 1];
+    cb(null, `${Date.now()}.${extension}`);
+  },
+});
+
+const upload = multer({ storage });
 
 const path = "/users";
 
@@ -29,11 +46,39 @@ const findById = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  let user = req.body;
+  /*let user = req.body;
   const id = +req.params.id;
-  //const _user = await service.update(id, user);
   user = await service.update(id, user);
-  res.json(user);
+  res.json(user);*/
+  try {
+    let user = req.body;
+    // console.log("user", user);
+    const file = req.file;
+    const photoUser = await fs.readFile(file.path);
+    const id = +req.params.id;
+    user = { ...user, photoUser };
+    user = await service.update(id, user);
+    res.json(user);
+  } catch (e) {
+    console.error(e);
+    res.status(500).send({ message: "Une erreur inconnue est survenue." });
+  }
+};
+
+const updatePhoto = async (req, res) => {
+  try {
+    let user = req.body;
+    // console.log("user", user);
+    const file = req.file;
+    const photoUser = await fs.readFile(file.path);
+    const id = +req.params.id;
+    user = { ...user, photoUser };
+    user = await service.updatePhoto(id, user);
+    res.json(user);
+  } catch (e) {
+    console.error(e);
+    res.status(500).send({ message: "Une erreur inconnue est survenue." });
+  }
 };
 
 const destroy = async (req, res) => {
@@ -48,7 +93,7 @@ const find = async (req, res) => {
   if (remember === true) {
     var rememberTime = "8760h";
   } else {
-    rememberTime = "1h";
+    rememberTime = "0.05h";
   }
   user = await service.find(email, password);
   if (user === null) {
@@ -85,14 +130,20 @@ const isAuth = async (req, res) => {
 
 const addRoutes = (app) => {
   const router = Router();
+
   router.post("/", create);
-  router.put("/:id", update);
+  router.put("/:id", upload.single("photoUser"), update);
+
   router.delete("/:id", destroy);
   router.get("/:id", findById);
   router.get("/", findAll);
+
   router.post("/login/", find);
   router.get("/auth/:token", isAuth);
   router.get("/login/:email", findLogin);
+
+  router.post("/:id", upload.single("photoUser"), updatePhoto);
+
   app.use(path, router);
 };
 

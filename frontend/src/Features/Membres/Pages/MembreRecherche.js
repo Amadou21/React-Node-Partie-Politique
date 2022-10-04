@@ -13,93 +13,108 @@ import {
   Stack,
   Grid,
   CardHeader,
-  // getAutocompleteUtilityClass,
+  Collapse,
 } from "@mui/material";
 import { Avatar, Chip } from "@mui/material";
 import { usePays } from "../Services/PaysServices/pays.store";
-import { useType, useTypeById } from "../Services/TypeServices/type.store";
-import {
-  useRegion,
-  useRegionById,
-} from "../Services/RegionServices/region.store";
-import {
-  useLocalite,
-  useLocaliteById,
-} from "../Services/LocaliteServices/localite.store";
+import { useType } from "../Services/TypeServices/type.store";
+import { useRegion } from "../Services/RegionServices/region.store";
+import { useLocalite } from "../Services/LocaliteServices/localite.store";
 import { optionsLocalite, optionsType, optionsRegion } from "./Module";
 import { useBureaux } from "../Services/BureauServices/bureau.store";
+import { useMembres } from "../Services/MembreServices/membre.store";
 
 const MembreRecherche = () => {
   const { pays } = usePays();
   const { types } = useType();
   const { regions } = useRegion();
-  const { localites } = useLocalite();
+  const { localites, isLoading } = useLocalite();
   const { bureaux } = useBureaux();
+  const { membres } = useMembres();
+
   const [valuePays, setValuePays] = React.useState(null); //pays
   const [valueType, setValueType] = React.useState(null); //types
   const [valueRegion, setValueRegion] = React.useState(regions); //null
   const [valueLocalite, setValueLocalite] = React.useState(localites); //null
   const [valueBureau, setValueBureau] = React.useState(null);
+  const [valueMembre, setValueMembre] = React.useState(null);
 
-  //----------------------------------------------------------------
+  const [openCollapse, setOpenCollapse] = React.useState(false);
 
+  // ----------------------------------------------------------------
+  // les useEffects
   useEffect(() => {
-    setValueRegion(regions);
-  }, [regions]);
-
-  //----------------------------------------------------------------
-  const handleValuePays = (event, newValue) => {
-    setValuePays(pays.find((pays) => pays.idPays === newValue.idPays));
-    console.log(valuePays);
-  };
-
-  const handleAutoCompletePays = (newValue) => {
-    if (newValue.libelleType === "Regional") {
-      console.log("newValue", valuePays);
-
-      const regionTrouver = regions.filter(
-        (region) => region.idPays === valuePays.idPays
-      );
-      setValueRegion(regionTrouver);
-
-      return regionTrouver;
-    } else {
-      // const { type } = useTypeById(valueType.idType);//valueType.idType ===1 <=>'National'
-      setValueBureau(
-        bureaux.filter((bureau) => bureau.idType === newValue.idType)
-      );
-      console.log("bureaux id", bureaux[0].idType);
-
-      const bureauSelect = bureaux.filter(
-        (bureau) => bureau.idType === newValue.idType
-      );
-      console.log("bureauSelect", bureauSelect);
-
-      setValueLocalite(
-        localites.filter(
+    if (valuePays != null && valueType != null) {
+      if (valueType?.libelleType === "Regional") {
+        const regionTrouver = regions.filter(
+          (region) => region.idPays === valuePays.idPays
+        );
+        setValueRegion(regionTrouver);
+      } else {
+        setValueBureau(
+          bureaux.find((bureau) => bureau.idPays === valuePays.idPays)
+        );
+        const bureauSelect = bureaux.find(
+          (bureau) => bureau.idPays === valuePays.idPays
+        );
+        const localiteSelect = localites.find(
           (localite) => localite.idLocalite === bureauSelect.idLocalite
-        )
-      );
-      const localiteSelect = localites.find(
-        (localite) => localite.idLocalite === bureauSelect.idLocalite
-      );
-      console.log("localiteSelect", localiteSelect);
-      setValueRegion(
-        regions.filter((region) => region.idRegion === localiteSelect.idRegion)
-      );
+        );
+        const regionSelect = regions.find(
+          (region) => region.idRegion === localiteSelect.idRegion
+        );
+
+        setValueLocalite([localiteSelect]);
+        setValueRegion([regionSelect]);
+      }
     }
+  }, [valuePays, valueType]);
+  //----------------------------------------------------------------
+  useEffect(() => {
+    if (valueBureau != null) {
+      setValueMembre(
+        membres.filter((membre) => membre.idBureau === valueBureau.idBureau)
+      );
+      // console.log("value membre " + valueMembre);
+    }
+  }, [valueBureau]);
+
+  //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
+  const handleValuePays = (event, newValue) => {
+    setValuePays(pays.find(({ idPays }) => idPays === newValue.idPays));
+    // console.log(valuePays);
   };
   //----------------------------------------------------------------
-
-  const handleAutoCompleteRegion = (event, newValue) => {
+  const handleAutoCompleteLocalite = (event, newValue) => {
     const localiteTrouver = localites.filter(
       (localite) => localite.idRegion === newValue.idRegion
     );
     setValueLocalite(
       localites.filter((localite) => localite.idRegion === newValue.idRegion)
     );
+    if (valueType != null && valueType.libelleType == "National") {
+      // setValueLocalite(valueLocalite);
+      return valueLocalite;
+    }
     return localiteTrouver;
   };
+  //----------------------------------------------------------------
+  const handleBureau = (event, newValue) => {
+    setOpenCollapse(true);
+    const bureauSelect = bureaux.find(
+      (bureau) => bureau.idLocalite === newValue.idLocalite
+    );
+    return bureauSelect;
+  };
+  //|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
+
+  const toBase64 = (arr) => {
+    arr = new Uint8Array(arr); // if it's an ArrayBuffer
+    return btoa(
+      arr.reduce((data, byte) => data + String.fromCharCode(byte), "")
+    );
+  };
+
   //----------------------------------------------------------------
   const options = (param) =>
     param.map((option) => {
@@ -109,7 +124,7 @@ const MembreRecherche = () => {
         ...option,
       };
     });
-  // var pays_value =getAutocompleteUtilityClass
+
   return (
     <AppLayout>
       <Card>
@@ -117,7 +132,7 @@ const MembreRecherche = () => {
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} sm={6} lg={3}>
               <Autocomplete
-                id="grouped-demo"
+                id="grouped-pays"
                 options={options(pays).sort(
                   (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
                 )}
@@ -132,7 +147,7 @@ const MembreRecherche = () => {
 
             <Grid item xs={12} md={6} sm={6} lg={3}>
               <Autocomplete
-                id="grouped-demo"
+                id="grouped-types"
                 options={optionsType(types).sort(
                   (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
                 )}
@@ -141,9 +156,8 @@ const MembreRecherche = () => {
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 sx={{ minWidth: 300 }}
                 onChange={(event, newValue) => {
-                  setValueType(newValue);
                   //----------------------------------------------------------------
-                  setValueRegion(handleAutoCompletePays(newValue));
+                  setValueType(newValue);
                   //----------------------------------------------------------------
                 }}
                 renderInput={(params) => (
@@ -153,7 +167,7 @@ const MembreRecherche = () => {
             </Grid>
             <Grid item xs={12} md={6} sm={6} lg={3}>
               <Autocomplete
-                id="grouped-demo"
+                id="grouped-regions"
                 options={optionsRegion(valueRegion).sort(
                   (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
                 )}
@@ -162,111 +176,145 @@ const MembreRecherche = () => {
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 sx={{ minWidth: 300 }}
                 //----------------------------------------------------------------
-
                 onChange={(event, newValue) => {
-                  setValueLocalite(handleAutoCompleteRegion(event, newValue));
+                  setValueLocalite(handleAutoCompleteLocalite(event, newValue));
                 }}
-                //----------------------------------------------------------------
-
                 renderInput={(params) => (
                   <TextField {...params} label="Region du bureau" />
                 )}
               />
             </Grid>
             <Grid item xs={12} md={6} sm={6} lg={3}>
-              <Autocomplete
-                id="grouped-demo"
-                options={optionsLocalite(valueLocalite).sort(
-                  (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
-                )}
-                groupBy={(option) => option.firstLetter}
-                getOptionLabel={(option) => option.libelleLocalite}
-                isOptionEqualToValue={(option, value) => option.id === value.id}
-                sx={{ minWidth: 300 }}
-                //----------------------------------------------------------------
-                onChange={(event, newValue) => {
-                  // setValueLocalite(newValue);
-                  const localiteSelect = newValue;
-                  setValueBureau(
-                    bureaux.find(
-                      (bureau) =>
-                        bureau.idLocalite === localiteSelect.idLocalite
-                    )
-                  );
-                }}
-                //----------------------------------------------------------------
-
-                renderInput={(params) => (
-                  <TextField {...params} label="Les differentes localitée" />
-                )}
-              />
+              {!isLoading && (
+                <Autocomplete
+                  id="grouped-localites"
+                  //je veux une valeur par default
+                  // value={valueLocalite[0]?.libelleLocalite}
+                  options={optionsLocalite(valueLocalite).sort(
+                    (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
+                  )}
+                  groupBy={(option) => option.firstLetter}
+                  getOptionLabel={(option) => option.libelleLocalite}
+                  isOptionEqualToValue={(option, value) =>
+                    option.id === value.id
+                  }
+                  sx={{ minWidth: 300 }}
+                  //----------------------------------------------------------------
+                  onChange={(event, newValue) => {
+                    setValueBureau(handleBureau(event, newValue));
+                  }}
+                  //----------------------------------------------------------------
+                  renderInput={(params) => (
+                    <TextField {...params} label="Les differentes localitée" />
+                  )}
+                />
+              )}
             </Grid>
           </Grid>
         </CardContent>
       </Card>
-      <Card sx={{ minWidth: 345, mt: 3 }}>
-        <CardContent sx={{ dispay: "flex" }}>
-          <Box>
-            <CardMedia
-              component="img"
-              height="240"
-              alt="Photo du bureau"
-              image={require("../../../Resources/bureau.jpg")}
-            />
+      <Collapse in={openCollapse}>
+        <Card sx={{ minWidth: 345, mt: 3 }}>
+          <CardContent sx={{ dispay: "flex" }}>
             <Box>
-              <Typography gutterBottom variant="h5" component="div">
-                Bureau de Bougounie
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Lizards are a widespread group of squamate reptiles, with over
-                6,000 species, ranging across all continents except Antarctica
-              </Typography>
-            </Box>
-          </Box>
-          <Card elevation={4} sx={{ padding: 3, marginTop: 5 }}>
-            <Stack>
-              <Typography gutterBottom variant="h5" component="div">
-                Liste des membres
-              </Typography>
-              <TextField
-                label="Rechercher"
-                sx={{ minWidth: 300, maxWidth: 500, alignSelf: "center" }}
+              <CardMedia
+                component="img"
+                alt="Photo du bureau"
+                // src={`data:image/png;base64,${toBase64(
+                //   valueBureau?.photoBureau.data
+                // )}`} //url
+                image={`data:image/png;base64,${toBase64(
+                  valueBureau?.photoBureau.data
+                )}`}
+                // j'ai beau cherché j'ai pas trouvé de difference entre src et image
+                // ça marche avec image et src même si tu mets les 2 ça marche
               />
-            </Stack>
-            <CardContent>
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={4} sm={6} lg={4} xl={3}>
-                  <Card>
-                    <CardHeader
-                      title="Amadou Maiga"
-                      subheader="amadou@gmail.com"
-                      avatar={<Avatar>A</Avatar>}
-                    />
-                    <CardContent>
-                      <Box sx={{ display: "flex" }}>
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Poste:{" "}
-                        </Typography>
-                        <Typography variant="p">Developpeur</Typography>
-                      </Box>
-                      <Box sx={{ justifyContent: "end" }}>
-                        <Chip
-                          sc={{ alignSelf: "end", mt: 2 }}
-                          label="voir plus"
+              <Box>
+                <Typography gutterBottom variant="h5" component="div">
+                  {valueBureau?.libelleBureau} : Bureau de Bougounie
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {valueBureau?.description} : Lizards are a widespread group of
+                  squamate reptiles, with over 6,000 species, ranging across all
+                  continents except Antarctica
+                </Typography>
+              </Box>
+            </Box>
+            <Card elevation={4} sx={{ padding: 3, marginTop: 5 }}>
+              <Stack>
+                <Typography gutterBottom variant="h5" component="div">
+                  Liste des membres
+                </Typography>
+                <TextField
+                  label="Rechercher"
+                  sx={{ minWidth: 300, maxWidth: 500, alignSelf: "center" }}
+                />
+              </Stack>
+              <CardContent>
+                <Grid container spacing={3}>
+                  {valueMembre?.map((membre) => (
+                    <Grid
+                      key={membre.idMembre}
+                      item
+                      xs={12}
+                      md={4}
+                      sm={6}
+                      lg={4}
+                      xl={3}
+                    >
+                      <Card>
+                        <CardHeader
+                          title={membre.prenom + " " + membre.nom}
+                          // subheader="amadou@gmail.com"
+                          avatar={
+                            <Avatar>
+                              <img
+                                style={{
+                                  width: "auto",
+                                  height: "auto",
+                                  minHeight: "85%",
+                                  maxWidth: "100%",
+                                  maxHeight: "100%",
+                                }}
+                                src={`data:image/png;base64,${toBase64(
+                                  membre?.photoMembre.data
+                                )}`}
+                              />
+                            </Avatar>
+                          }
                         />
-                      </Box>
-                    </CardContent>
-                  </Card>
+                        <CardContent>
+                          <Box sx={{ display: "flex" }}>
+                            <Typography sx={{ fontWeight: "bold" }}>
+                              Poste:{" " + membre.libellePoste}
+                            </Typography>
+                          </Box>
+                          <Stack
+                            sx={{
+                              alignItems: "end",
+                            }}
+                          >
+                            <Chip
+                              sx={{
+                                mt: 2,
+                              }}
+                              label="voir plus"
+                            />
+                          </Stack>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
                 </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
-        </CardContent>
-        <CardActions>
-          <Button size="small">Share</Button>
-          <Button size="small">Learn More</Button>
-        </CardActions>
-      </Card>
+              </CardContent>
+            </Card>
+          </CardContent>
+          <CardActions>
+            <Button size="small">Share</Button>
+            <Button size="small">Learn More</Button>
+          </CardActions>
+        </Card>
+      </Collapse>
     </AppLayout>
   );
 };

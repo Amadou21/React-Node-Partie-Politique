@@ -8,6 +8,7 @@ const UserModel = sequelize.define(
     nom: { type: Sequelize.STRING },
     login: { type: Sequelize.STRING },
     motDePass: { type: Sequelize.STRING },
+    photoUser: { type: Sequelize.BLOB("long") },
   },
   {
     ...defaultOptions,

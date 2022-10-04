@@ -9,6 +9,7 @@ export const optionsType = (param) =>
 
 export const optionsRegion = (param) =>
   param.map((option) => {
+    // console.log("nom de la region", option);
     const firstLetter = option.libelleRegion[0].toUpperCase();
     return {
       firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
