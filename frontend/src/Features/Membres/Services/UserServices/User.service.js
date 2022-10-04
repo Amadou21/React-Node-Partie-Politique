@@ -2,8 +2,7 @@ import { crudLocalhost, urlBase } from "../../../../shared/service.utils";
 
 const entityName = "users/";
 
-export const { findAll, findById, destroy, create, update } =
-  crudLocalhost(entityName);
+export const { findAll, findById, destroy, create } = crudLocalhost(entityName);
 
 export const create2 = async (data) => {
   const resp = await create(data).then((res) => res.json());
@@ -19,15 +18,14 @@ export const find = async ({ ...data }) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-  const { token, idUser } = await fetch(urlBase + entityName + "login/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  }).then((res) => res.json());
+
   if (response.ok) {
+    const { token, idUser } = await response.json();
+
     addToken("token", token);
     addToken("idUser", idUser);
   }
+
   return response;
 };
 export const isAuth = async (token) => {
@@ -38,7 +36,7 @@ export const isAuth = async (token) => {
 };
 
 function addToken(nom, valeur) {
-  localStorage.removeItem(nom);
+  //localStorage.removeItem(nom);
   localStorage.setItem(nom, valeur);
 }
 
@@ -62,7 +60,44 @@ const crud = (urlBase) => (entityName) => {
   const entityUrl = path(urlBase)(entityName);
   return {
     findLogin: async (email) => fetch(entityUrl + "login/" + email),
+    // update: async ({ idUser, ...data }) => {
+    //   await fetch(entityUrl + idUser, {
+    //     method: "PUT",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify(data),
+    //   });
+    // },
+    update: async ({ idUser, ...data }) => {
+      const formData = new FormData();
+      formData.append("photoUser", data.photoUser);
+      formData.append("nom", data.nom);
+      formData.append("prenom", data.prenom);
+      formData.append("motDePasse", data.motDePasse);
+      formData.append("login", data.login);
+      await fetch(entityUrl + idUser, {
+        method: "POST",
+        body: formData,
+      });
+    },
+    updatePhoto: async ({ idUser, photoUser, ...data }) => {
+      const formData = new FormData();
+      formData.append("photoUser", photoUser);
+      // formData.append("user", ...data);
+      formData.append("nom", data.nom);
+      formData.append("prenom", data.prenom);
+      formData.append("motDePasse", data.motDePasse);
+      formData.append("login", data.login);
+      // data.photoUser = data.photoUser.File;
+      await fetch(entityUrl + idUser, {
+        method: "POST",
+        // body: JSON.stringify(data),
+        body: formData,
+        // headers: {
+        //   "Content-Type": "multipart/form-data",
+        // },
+      });
+    },
   };
 };
 
-export const { findLogin } = crud(urlBase)(entityName);
+export const { findLogin, update, updatePhoto } = crud(urlBase)(entityName);

@@ -31,7 +31,7 @@ const App = () => {
 
   const routesUser = [
     { link: "/compte/:id", element: <UserCompte /> },
-    { link: "/tableauDeBord", element: <TableauDeBord /> },
+    { link: "/tableauDeBord/:id", element: <TableauDeBord /> },
     { link: "/userDetail/:id", element: <UserDetail /> },
     { link: "/userProfil/:id", element: <UserProfil /> },
   ];

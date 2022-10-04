@@ -138,8 +138,18 @@ const LoginForm = ({ handleClickOpen }) => {
               <FormControlLabel
                 control={
                   <Checkbox
-                    {...getFieldProps("remember")}
                     checked={values.remember}
+                    {...getFieldProps("remember")}
+                    // onClick={
+                    //   values.remember
+                    //     ? (values.remember = false)
+                    //     : (values.remember = true)
+                    // }
+                    // onChange={
+                    //   values.remember
+                    //     ? (values.remember = false)
+                    //     : (values.remember = true)
+                    // }
                   />
                 }
                 label="Se souvenir de moi"
