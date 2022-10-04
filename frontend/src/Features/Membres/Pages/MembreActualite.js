@@ -3,7 +3,7 @@ import AppLayout from "../../Layout/AppLayout";
 import { useAuthContext } from "../../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { CircularProgress } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 
 const MembreActualite = () => {
   const { auth } = useAuthContext();
@@ -15,14 +15,16 @@ const MembreActualite = () => {
     }
   }, [auth, navigate]);
   return (
-    <AppLayout>
+    // <AppLayout>
+    <Box>
       {!auth && <CircularProgress />}
       {auth && (
         <div>
           <h1>Membre Actu</h1>
         </div>
       )}
-    </AppLayout>
+    </Box>
+    // </AppLayout>
   );
 };
 

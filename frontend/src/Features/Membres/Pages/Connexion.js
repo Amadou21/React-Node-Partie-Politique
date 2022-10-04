@@ -68,7 +68,8 @@ const Connexion = () => {
   };
 
   return (
-    <AppLayout>
+    // <AppLayout>
+    <Box>
       {auth && handleLogOut()}
       <RootStyle sx={{ ml: 0 }}>
         <Container maxWidth="sm">
@@ -114,7 +115,8 @@ const Connexion = () => {
           <Button onClick={handleClose}>Fermer</Button>
         </DialogActions>
       </Dialog>
-    </AppLayout>
+    </Box>
+    //  </AppLayout>
   );
 };
 

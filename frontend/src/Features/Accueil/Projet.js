@@ -3,9 +3,9 @@ import AppLayout from "../Layout/AppLayout";
 
 const Projet = () => {
   return (
-    <AppLayout>
-      <div>Projet</div>
-    </AppLayout>
+    // <AppLayout>
+    <div>Projet</div>
+    // </AppLayout>
   );
 };
 

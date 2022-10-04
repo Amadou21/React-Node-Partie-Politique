@@ -136,99 +136,97 @@ const UserDetail = () => {
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
   return (
-    <AppLayout>
-      <FormikProvider value={formik}>
-        <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-          {!isLoading && (
-            <Card>
-              <CardHeader title="Detail du user" />
-              <Stack
-                marginBottom={3}
-                alignItems="center"
-                component={motion.div}
-                initial={{ opacity: 0, y: 150 }}
-                animate={animate}
-                direction={{ xs: "column", sm: "column" }}
-                spacing={2}
+    // <AppLayout>
+    <FormikProvider value={formik}>
+      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+        {!isLoading && (
+          <Card>
+            <CardHeader title="Detail du user" />
+            <Stack
+              marginBottom={3}
+              alignItems="center"
+              component={motion.div}
+              initial={{ opacity: 0, y: 150 }}
+              animate={animate}
+              direction={{ xs: "column", sm: "column" }}
+              spacing={2}
+            >
+              <Avatar
+                src={`data:image/png;base64,${toBase64(user?.photoUser?.data)}`}
+                sx={{
+                  height: "25%",
+                  width: "25%",
+                  alignSelf: "center",
+                  mb: 3,
+                }}
+              />
+              <Button
+                variant="contained"
+                component="label"
+                sx={{ width: "30%" }}
               >
-                <Avatar
-                  src={`data:image/png;base64,${toBase64(
-                    user?.photoUser?.data
-                  )}`}
-                  sx={{
-                    height: "25%",
-                    width: "25%",
-                    alignSelf: "center",
-                    mb: 3,
-                  }}
+                Changer la photo
+                <input
+                  type="file"
+                  hidden
+                  name="photoUser"
+                  accept="image/png, image/gif, image/jpeg, image/webp, image/jpg, image/heivc"
+                  ref={myUserPhoto}
+                  onChange={handleFile}
                 />
-                <Button
-                  variant="contained"
-                  component="label"
-                  sx={{ width: "30%" }}
+              </Button>
+            </Stack>
+
+            <Stack>
+              {myUserPhoto && (
+                <img
+                  src={`data:image/png;base64,${toBase64(myUserPhoto)}`}
+                  alt={"myUserPhoto"}
+                />
+              )}
+            </Stack>
+            <CardContent>
+              <Stack spacing={3}>
+                <Stack
+                  component={motion.div}
+                  initial={{ opacity: 0, y: 60 }}
+                  animate={animate}
+                  direction={{ xs: "column", sm: "row" }}
+                  spacing={2}
                 >
-                  Changer la photo
-                  <input
-                    type="file"
-                    hidden
-                    name="photoUser"
-                    accept="image/png, image/gif, image/jpeg, image/webp, image/jpg, image/heivc"
-                    ref={myUserPhoto}
-                    onChange={handleFile}
+                  <TextField
+                    fullWidth
+                    label="Prenom"
+                    {...getFieldProps("prenom")}
+                    error={Boolean(touched.prenom && errors.prenom)}
+                    helperText={touched.prenom && errors.prenom}
                   />
-                </Button>
-              </Stack>
-
-              <Stack>
-                {myUserPhoto && (
-                  <img
-                    src={`data:image/png;base64,${toBase64(myUserPhoto)}`}
-                    alt={"myUserPhoto"}
+                  <TextField
+                    fullWidth
+                    label="Nom"
+                    {...getFieldProps("nom")}
+                    error={Boolean(touched.nom && errors.nom)}
+                    helperText={touched.nom && errors.nom}
                   />
-                )}
-              </Stack>
-              <CardContent>
-                <Stack spacing={3}>
-                  <Stack
-                    component={motion.div}
-                    initial={{ opacity: 0, y: 60 }}
-                    animate={animate}
-                    direction={{ xs: "column", sm: "row" }}
-                    spacing={2}
-                  >
-                    <TextField
-                      fullWidth
-                      label="Prenom"
-                      {...getFieldProps("prenom")}
-                      error={Boolean(touched.prenom && errors.prenom)}
-                      helperText={touched.prenom && errors.prenom}
-                    />
-                    <TextField
-                      fullWidth
-                      label="Nom"
-                      {...getFieldProps("nom")}
-                      error={Boolean(touched.nom && errors.nom)}
-                      helperText={touched.nom && errors.nom}
-                    />
-                  </Stack>
+                </Stack>
 
-                  <Stack
-                    spacing={3}
-                    component={motion.div}
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={animate}
-                  >
-                    <TextField
-                      fullWidth
-                      autoComplete="username"
-                      type="email"
-                      label="Email"
-                      {...getFieldProps("login")}
-                      error={Boolean(touched.login && errors.login)}
-                      helperText={touched.login && errors.login}
-                    />
+                <Stack
+                  spacing={3}
+                  component={motion.div}
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={animate}
+                >
+                  <TextField
+                    fullWidth
+                    autoComplete="username"
+                    type="email"
+                    label="Email"
+                    {...getFieldProps("login")}
+                    error={Boolean(touched.login && errors.login)}
+                    helperText={touched.login && errors.login}
+                  />
 
-                    {/* <TextField
+                  {/* <TextField
                     fullWidth
                     autoComplete="current-password"
                     type={showPassword ? "text" : "password"}
@@ -253,30 +251,30 @@ const UserDetail = () => {
                     error={Boolean(touched.motDePass && errors.motDePass)}
                     helperText={touched.motDePass && errors.motDePass}
                   /> */}
-                  </Stack>
-
-                  <Box
-                    component={motion.div}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={animate}
-                  >
-                    <LoadingButton
-                      fullWidth
-                      size="large"
-                      type="submit"
-                      variant="contained"
-                      loading={isSubmitting}
-                    >
-                      Modifier
-                    </LoadingButton>
-                  </Box>
                 </Stack>
-              </CardContent>
-            </Card>
-          )}
-        </Form>
-      </FormikProvider>
-    </AppLayout>
+
+                <Box
+                  component={motion.div}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={animate}
+                >
+                  <LoadingButton
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                    loading={isSubmitting}
+                  >
+                    Modifier
+                  </LoadingButton>
+                </Box>
+              </Stack>
+            </CardContent>
+          </Card>
+        )}
+      </Form>
+    </FormikProvider>
+    // </AppLayout>
   );
 };
 
