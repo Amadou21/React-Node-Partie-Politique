@@ -126,7 +126,8 @@ const MembreRecherche = () => {
     });
 
   return (
-    <AppLayout>
+    // <AppLayout>
+    <Box>
       <Card>
         <CardContent>
           <Grid container spacing={3}>
@@ -315,7 +316,8 @@ const MembreRecherche = () => {
           </CardActions>
         </Card>
       </Collapse>
-    </AppLayout>
+    </Box>
+    // </AppLayout>
   );
 };
 

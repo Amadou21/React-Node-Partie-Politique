@@ -26,13 +26,13 @@ const Actualites = () => {
   console.log("Data :", data);
   //const componentDidMount =
   return (
-    <AppLayout>
-      <Box>
-        {data.map((dat) => (
-          <MediaCard key={dat.title} news={dat} />
-        ))}
-      </Box>
-    </AppLayout>
+    // <AppLayout>
+    <Box>
+      {data.map((dat) => (
+        <MediaCard key={dat.title} news={dat} />
+      ))}
+    </Box>
+    // </AppLayout>
   );
 };
 

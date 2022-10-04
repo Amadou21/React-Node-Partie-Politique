@@ -49,55 +49,55 @@ const Accueil = () => {
     },
   ];
   return (
-    <AppLayout>
-      <div>
-        <h1>Accueil</h1>
-        <Card>
-          <Grid>
-            <Card>
-              {images.map((image, i) => (
-                <CardContent
-                // sx={{
-                //   backgroundImage: URL(image.srcImg),
-                //   // <img src={image.srcImg}></img>
-                // }}
-                >
-                  <Typography>
-                    {image.libelle}frontend\public\Resources\image_1.jpg
-                  </Typography>
-                </CardContent>
-              ))}
-            </Card>
+    // <AppLayout>
+    <div>
+      <h1>Accueil</h1>
+      <Card>
+        <Grid>
+          <Card>
+            {images.map((image, i) => (
+              <CardContent
+              // sx={{
+              //   backgroundImage: URL(image.srcImg),
+              //   // <img src={image.srcImg}></img>
+              // }}
+              >
+                <Typography>
+                  {image.libelle}frontend\public\Resources\image_1.jpg
+                </Typography>
+              </CardContent>
+            ))}
+          </Card>
+        </Grid>
+        <CardContent>
+          <Grid container>
+            {grandlignes?.map((grandligne) => (
+              <Grid
+                key={grandligne.contenuSousTitre}
+                item
+                xs={12}
+                md={4}
+                sm={6}
+                lg={4}
+                xl={3}
+              >
+                <Card>
+                  <CardHeader title={<Box>{grandligne.titre}</Box>} />
+                  <CardContent>
+                    <Box sx={{ display: "flex" }}>
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        {grandligne.sousTitre}:{grandligne.contenuSousTitre}
+                      </Typography>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
           </Grid>
-          <CardContent>
-            <Grid container>
-              {grandlignes?.map((grandligne) => (
-                <Grid
-                  key={grandligne.contenuSousTitre}
-                  item
-                  xs={12}
-                  md={4}
-                  sm={6}
-                  lg={4}
-                  xl={3}
-                >
-                  <Card>
-                    <CardHeader title={<Box>{grandligne.titre}</Box>} />
-                    <CardContent>
-                      <Box sx={{ display: "flex" }}>
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          {grandligne.sousTitre}:{grandligne.contenuSousTitre}
-                        </Typography>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-          </CardContent>
-        </Card>
-      </div>
-    </AppLayout>
+        </CardContent>
+      </Card>
+    </div>
+    // </AppLayout>
   );
 };
 

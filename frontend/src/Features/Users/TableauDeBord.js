@@ -141,77 +141,75 @@ const TableauDeBord = () => {
   const { handleSubmit, isSubmitting } = formik;
 
   return (
-    <AppLayout>
-      <FormikProvider value={formik}>
-        <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-          {!isLoading && (
-            <Card>
-              <CardHeader title="Detail du user" />
-              <Stack
-                marginBottom={3}
-                alignItems="center"
-                component={motion.div}
-                initial={{ opacity: 0, y: 150 }}
-                animate={animate}
-                direction={{ xs: "column", sm: "column" }}
-                spacing={2}
+    // <AppLayout>
+    <FormikProvider value={formik}>
+      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+        {!isLoading && (
+          <Card>
+            <CardHeader title="Detail du user" />
+            <Stack
+              marginBottom={3}
+              alignItems="center"
+              component={motion.div}
+              initial={{ opacity: 0, y: 150 }}
+              animate={animate}
+              direction={{ xs: "column", sm: "column" }}
+              spacing={2}
+            >
+              <Avatar
+                src={`data:image/png;base64,${toBase64(user?.photoUser.data)}`}
+                sx={{
+                  height: "25%",
+                  width: "25%",
+                  alignSelf: "center",
+                  mb: 3,
+                }}
+              />
+              <Button
+                variant="contained"
+                component="label"
+                sx={{ width: "30%" }}
               >
-                <Avatar
-                  src={`data:image/png;base64,${toBase64(
-                    user?.photoUser.data
-                  )}`}
-                  sx={{
-                    height: "25%",
-                    width: "25%",
-                    alignSelf: "center",
-                    mb: 3,
-                  }}
+                Changer la photo
+                <input
+                  type="file"
+                  hidden
+                  name="photoUser"
+                  accept="image/png, image/gif, image/jpeg, image/webp, image/jpg, image/heivc"
+                  ref={myUserPhoto}
+                  // {...getFieldProps("photoUser")}
+                  // error={Boolean(touched.photoUser && errors.photoUser)}
+                  // helperText={touched.photoUser && errors.photoUser}
+                  // onChange={(e) => {
+                  //   Form.setFieldValue(field.name, e.target.files[0]);
+                  // }}
+                  onChange={handleFile}
+                  // {...getFieldProps("photoUser")}
                 />
-                <Button
+              </Button>
+            </Stack>
+            <Stack spacing={5}>
+              <Box
+                component={motion.div}
+                initial={{ opacity: 0, y: 20 }}
+                animate={animate}
+              >
+                <LoadingButton
+                  fullWidth
+                  size="large"
+                  type="submit"
                   variant="contained"
-                  component="label"
-                  sx={{ width: "30%" }}
+                  loading={isSubmitting}
                 >
-                  Changer la photo
-                  <input
-                    type="file"
-                    hidden
-                    name="photoUser"
-                    accept="image/png, image/gif, image/jpeg, image/webp, image/jpg, image/heivc"
-                    ref={myUserPhoto}
-                    // {...getFieldProps("photoUser")}
-                    // error={Boolean(touched.photoUser && errors.photoUser)}
-                    // helperText={touched.photoUser && errors.photoUser}
-                    // onChange={(e) => {
-                    //   Form.setFieldValue(field.name, e.target.files[0]);
-                    // }}
-                    onChange={handleFile}
-                    // {...getFieldProps("photoUser")}
-                  />
-                </Button>
-              </Stack>
-              <Stack spacing={5}>
-                <Box
-                  component={motion.div}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={animate}
-                >
-                  <LoadingButton
-                    fullWidth
-                    size="large"
-                    type="submit"
-                    variant="contained"
-                    loading={isSubmitting}
-                  >
-                    Modifier
-                  </LoadingButton>
-                </Box>
-              </Stack>
-            </Card>
-          )}
-        </Form>
-      </FormikProvider>
-    </AppLayout>
+                  Modifier
+                </LoadingButton>
+              </Box>
+            </Stack>
+          </Card>
+        )}
+      </Form>
+    </FormikProvider>
+    // </AppLayout>
   );
 };
 
