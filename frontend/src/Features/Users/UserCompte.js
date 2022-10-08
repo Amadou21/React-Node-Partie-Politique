@@ -16,30 +16,27 @@ import AppLayout from "../Layout/AppLayout";
 
 export const UserCard = ({ user }) => {
   return (
-    <AppLayout>
-      <Card>
-        <CardHeader
-          avatar={
-            <Stack
-              direction="column"
-              justifyContent="space-around"
-              alignItems="stretch"
-              spacing={2}
-            >
-              <Avatar>{user.id}</Avatar>
-            </Stack>
-          }
-          title={user.nom}
-          subheader={user.prenom}
-        />
-        <CardContent sx={{ textAlign: "center" }}>
-          <Chip
-            label={user.adresse}
-            icon={<HomeIcon sx={{ fontsize: 15 }} />}
-          />
-        </CardContent>
-      </Card>
-    </AppLayout>
+    // <AppLayout>
+    <Card>
+      <CardHeader
+        avatar={
+          <Stack
+            direction="column"
+            justifyContent="space-around"
+            alignItems="stretch"
+            spacing={2}
+          >
+            <Avatar>{user.id}</Avatar>
+          </Stack>
+        }
+        title={user.nom}
+        subheader={user.prenom}
+      />
+      <CardContent sx={{ textAlign: "center" }}>
+        <Chip label={user.adresse} icon={<HomeIcon sx={{ fontsize: 15 }} />} />
+      </CardContent>
+    </Card>
+    // </AppLayout>
   );
 };
 

@@ -5,24 +5,26 @@ import {
   Stack,
   TextField,
   Button,
-  // Link as MuiLink,
   Box,
   Avatar,
 } from "@mui/material";
-// import { Box } from "@mui/system";
-import React from "react";
-import { useNavigate } from "react-router-dom"; //useParams
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom"; //useParams
 import AppLayout from "../Layout/AppLayout";
 //----------------------------------------------------------------
 import * as Yup from "yup";
-import { useFormik, Form, FormikProvider } from "formik";
+import { useFormik, Form, FormikProvider, Field } from "formik";
 import { LoadingButton } from "@mui/lab";
 import { motion } from "framer-motion";
 import {
-  create,
+  update,
   findLogin,
 } from "../Membres/Services/UserServices/User.service";
 import { useSnackbar } from "notistack";
+// import { useAuthContext } from "../../Context/AuthContext";
+
+import { useUserById } from "../Membres/Services/UserServices/User.store"; //---------------------------
+import { useAuthContext } from "../../Context/AuthContext";
 
 let easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -37,37 +39,42 @@ const animate = {
 
 const UserDetail = () => {
   // les hooks (useState, useNavigate etc...)
+  const [file, setFile] = useState(null);
+
+  //----------------------------------------------------------------
+  const myUserPhoto = useRef(null);
+  //----------------------------------------------------------------
+
   const navigate = useNavigate();
   //les variables
-  const users = [
-    {
-      id: 1,
-      nom: "Doe",
-      prenom: "Jane",
-      login: "alydiarra1@gmail.com",
-    },
-    {
-      id: 2,
-      nom: "DIARRA",
-      prenom: "Aly",
-      login: "alydiarra2@gmail.com",
-    },
-    {
-      id: 3,
-      nom: "Maiga",
-      prenom: "Abba",
-      login: "alydiarra3@gmail.com",
-    },
-    {
-      id: 4,
-      nom: "Sissoko",
-      prenom: "Modibo",
-      login: "alydiarra@4gmail.com",
-    },
-  ];
-  const user = users.find((user) => user.id === 2);
+  // const { id } = useParams("id");
+  const { auth, idUser } = useAuthContext();
+  // const { idUser } = useAuthContext();
+  const { user, isLoading } = useUserById(Number(idUser));
 
+  //----------------------------------------------------------------
+  useEffect(() => {
+    if (!user) return;
+    if (!isLoading) {
+      const photo = myUserPhoto.current.value;
+      console.log("myUserPhoto", photo);
+    }
+  }, [isLoading]);
+  //----------------------------------------------------------------
+
+  const lastLogin = user?.login;
   const { enqueueSnackbar } = useSnackbar();
+
+  const toBase64 = (arr) => {
+    arr = new Uint8Array(arr); // if it's an ArrayBuffer
+    return btoa(
+      arr.reduce((data, byte) => data + String.fromCharCode(byte), "")
+    );
+  };
+
+  const handleFile = (e) => {
+    setFile(e.target.files[0]);
+  };
 
   const handleClickVariant = (message, variant) => {
     // variant could be success, error, warning, info, or default
@@ -75,36 +82,52 @@ const UserDetail = () => {
   };
 
   const UserDetailSchema = Yup.object().shape({
+    idUser: Yup.number().default(idUser),
     prenom: Yup.string()
       .min(2, "Trop court!")
       .max(50, "Trop long!")
       .required("Prenom obligatoire")
-      .default(user.prenom),
+      .default(user?.prenom),
     nom: Yup.string()
       .min(2, "Trop court!")
       .max(50, "Trop long!")
       .required("Nom obligatoire")
-      .default(user.nom),
+      .default(user?.nom),
     login: Yup.string()
       .email("Donnez un email valide")
       .required("Email obligatoire")
-      .default(user.login),
-    // motDePass: Yup.string().required("Mot de passe obligatoire").default(""),
+      .default(user?.login),
+    photoUser: Yup.mixed()
+      .test("file", "You need to provide a file", (value) => {
+        if (value) return true;
+        return false;
+      })
+      .nullable()
+      .default(user?.photoUser?.data),
+    motDePass: Yup.string().default(user?.motDePass),
   });
 
   const formik = useFormik({
     initialValues: UserDetailSchema.getDefaultFromShape(),
     validationSchema: UserDetailSchema,
     onSubmit: async (user) => {
+      console.log("userPhoto", user.photoUser);
+      if (file != null) {
+        user.photoUser = file;
+      }
+      console.log("userIdUser", user.idUser);
       const le_login = await findLogin(user.login);
-      if (le_login.ok) {
+      if (le_login.ok && user.login !== lastLogin) {
         handleClickVariant("Cet email existe déjà", "error");
       } else {
         setTimeout(() => {
-          create(user);
-          // setAuth = true;
-          handleClickVariant("Votre compte a été creer avec succès", "success");
+          update(user);
+          handleClickVariant(
+            "Votre compte a été modifier avec succès",
+            "success"
+          );
           navigate("/membre-actualites");
+          // location.reload(true);
         }, 2000);
       }
     },
@@ -113,9 +136,10 @@ const UserDetail = () => {
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
   return (
-    <AppLayout>
-      <FormikProvider value={formik}>
-        <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+    // <AppLayout>
+    <FormikProvider value={formik}>
+      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+        {!isLoading && (
           <Card>
             <CardHeader title="Detail du user" />
             <Stack
@@ -128,7 +152,7 @@ const UserDetail = () => {
               spacing={2}
             >
               <Avatar
-                src={"https://i.pravatar.cc/300"}
+                src={`data:image/png;base64,${toBase64(user?.photoUser?.data)}`}
                 sx={{
                   height: "25%",
                   width: "25%",
@@ -145,9 +169,21 @@ const UserDetail = () => {
                 <input
                   type="file"
                   hidden
+                  name="photoUser"
                   accept="image/png, image/gif, image/jpeg, image/webp, image/jpg, image/heivc"
+                  ref={myUserPhoto}
+                  onChange={handleFile}
                 />
               </Button>
+            </Stack>
+
+            <Stack>
+              {myUserPhoto && (
+                <img
+                  src={`data:image/png;base64,${toBase64(myUserPhoto)}`}
+                  alt={"myUserPhoto"}
+                />
+              )}
             </Stack>
             <CardContent>
               <Stack spacing={3}>
@@ -165,7 +201,6 @@ const UserDetail = () => {
                     error={Boolean(touched.prenom && errors.prenom)}
                     helperText={touched.prenom && errors.prenom}
                   />
-
                   <TextField
                     fullWidth
                     label="Nom"
@@ -236,9 +271,10 @@ const UserDetail = () => {
               </Stack>
             </CardContent>
           </Card>
-        </Form>
-      </FormikProvider>
-    </AppLayout>
+        )}
+      </Form>
+    </FormikProvider>
+    // </AppLayout>
   );
 };
 

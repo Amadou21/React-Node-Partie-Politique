@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../Context/AuthContext";
+import { useUserById } from "../Membres/Services/UserServices/User.store"; //---------------------------
 
 const pages = [
   { label: "Accueil", link: "/" },
@@ -30,9 +31,22 @@ const settings = ["Profil", "Compte", "Tableau de bord", "Déconnexion"];
 const AppLayout = ({ children }) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const navigate = useNavigate();
-  const { auth } = useAuthContext();
+  // const [userAuth, setUserAuth] = React.useState(false);
 
+  const { auth, idUser } = useAuthContext();
+
+  const { user } = useUserById(Number(idUser));
+  // console.log("photo du user", user.photoUser);
+  const navigate = useNavigate();
+
+  //|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
+
+  const toBase64 = (arr) => {
+    arr = new Uint8Array(arr); // if it's an ArrayBuffer
+    return btoa(
+      arr.reduce((data, byte) => data + String.fromCharCode(byte), "")
+    );
+  };
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -51,16 +65,16 @@ const AppLayout = ({ children }) => {
   const handleRedirection = (setting) => {
     switch (setting) {
       case "Compte":
-        navigate("/userDetail/1");
+        navigate("/userDetail/" + user.idUser);
         break;
       case "Tableau de bord":
-        navigate("/tableauDeBord");
+        navigate("/tableauDeBord/" + user.idUser);
         break;
       case "Déconnexion":
         navigate("/connexion");
         break;
       case "Profil":
-        navigate("/userProfil/1");
+        navigate("/userProfil/" + user.idUser);
         break;
       default:
         navigate("/");
@@ -204,7 +218,9 @@ const AppLayout = ({ children }) => {
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
                       alt="Remy Sharp"
-                      src="/static/images/avatar/2.jpg"
+                      src={`data:image/png;base64,${toBase64(
+                        user?.photoUser?.data
+                      )}`} //--------------------------------
                     />
                   </IconButton>
                 </Tooltip>

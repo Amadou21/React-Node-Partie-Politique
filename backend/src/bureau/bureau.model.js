@@ -7,11 +7,12 @@ const BureauModel = sequelize.define(
     libelleBureau: { type: Sequelize.STRING },
     description: { type: Sequelize.STRING },
     // -----------------------------------------------------------
-    photoBureau: { type: Sequelize.STRING },
+    photoBureau: { type: Sequelize.BLOB("long") },
     // -----------------------------------------------------------
     idLocalite: { type: Sequelize.BIGINT },
     idType: { type: Sequelize.BIGINT },
     idMandat: { type: Sequelize.BIGINT },
+    idPays: { type: Sequelize.BIGINT },
   },
   {
     ...defaultOptions,

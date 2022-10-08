@@ -55,30 +55,30 @@ export const PostCardDemo = React.memo(function PostCard() {
   //   const shadowStyles = useSoftRiseShadowStyles();
   //   const textCardContentStyles = useN01TextInfoContentStyles();
   return (
-    <AppLayout>
-      <Card>
-        className={cx(cardStyles.root)}
-        <CardMedia
-          // classes={mediaStyles}
-          image={
-            "https://images.unsplash.com/photo-1517147177326-b37599372b73?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2229&q=80"
-          }
-          sx={{ width: "100%", height: "100%" }}
-        />
-        <Avatar src={"https://i.pravatar.cc/300"} />
-        <CardContent>
-          <Typography variant="h6"> Nom </Typography>
-        </CardContent>
-        <Box px={2} pb={2} mt={-1}>
-          <IconButton>
-            <Share />
-          </IconButton>
-          <IconButton>
-            <FavoriteBorderRounded />
-          </IconButton>
-        </Box>
-      </Card>
-    </AppLayout>
+    // <AppLayout>
+    <Card>
+      className={cx(cardStyles.root)}
+      <CardMedia
+        // classes={mediaStyles}
+        image={
+          "https://images.unsplash.com/photo-1517147177326-b37599372b73?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2229&q=80"
+        }
+        sx={{ width: "100%", height: "100%" }}
+      />
+      <Avatar src={"https://i.pravatar.cc/300"} />
+      <CardContent>
+        <Typography variant="h6"> Nom </Typography>
+      </CardContent>
+      <Box px={2} pb={2} mt={-1}>
+        <IconButton>
+          <Share />
+        </IconButton>
+        <IconButton>
+          <FavoriteBorderRounded />
+        </IconButton>
+      </Box>
+    </Card>
+    // </AppLayout>
   );
 });
 

@@ -4,6 +4,7 @@ import AuthProvider, { useAuthContext } from "./Context/AuthContext";
 import Accueil from "./Features/Accueil/Accueil";
 import Actualites from "./Features/Accueil/Actualites";
 import Projet from "./Features/Accueil/Projet";
+import AppLayout from "./Features/Layout/AppLayout";
 import Connexion from "./Features/Membres/Pages/Connexion";
 import Inscription from "./Features/Membres/Pages/Inscription";
 import MembreActualite from "./Features/Membres/Pages/MembreActualite";
@@ -31,7 +32,7 @@ const App = () => {
 
   const routesUser = [
     { link: "/compte/:id", element: <UserCompte /> },
-    { link: "/tableauDeBord", element: <TableauDeBord /> },
+    { link: "/tableauDeBord/:id", element: <TableauDeBord /> },
     { link: "/userDetail/:id", element: <UserDetail /> },
     { link: "/userProfil/:id", element: <UserProfil /> },
   ];
@@ -39,25 +40,31 @@ const App = () => {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Routes>
-          {routes.map((route) => (
-            <Route key={route.link} path={route.link} element={route.element} />
-          ))}
-          {routesMembre.map((route) => (
-            <Route
-              key={route.link}
-              path={route.link}
-              element={auth ? <MembreActualite /> : route.element}
-            />
-          ))}
-          {routesUser.map((route) => (
-            <Route
-              key={route.link}
-              path={route.link}
-              element={auth ? <MembreActualite /> : route.element}
-            />
-          ))}
-        </Routes>
+        <AppLayout>
+          <Routes>
+            {routes.map((route) => (
+              <Route
+                key={route.link}
+                path={route.link}
+                element={route.element}
+              />
+            ))}
+            {routesMembre.map((route) => (
+              <Route
+                key={route.link}
+                path={route.link}
+                element={auth ? <MembreActualite /> : route.element}
+              />
+            ))}
+            {routesUser.map((route) => (
+              <Route
+                key={route.link}
+                path={route.link}
+                element={auth ? <MembreActualite /> : route.element}
+              />
+            ))}
+          </Routes>
+        </AppLayout>
       </BrowserRouter>
     </AuthProvider>
   );
