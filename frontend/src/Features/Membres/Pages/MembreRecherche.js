@@ -1,13 +1,10 @@
 import React, { useEffect } from "react";
-import AppLayout from "../../Layout/AppLayout";
 import {
   Box,
   Typography,
-  Button,
   Card,
   CardMedia,
   CardContent,
-  CardActions,
   Autocomplete,
   TextField,
   Stack,
@@ -23,6 +20,31 @@ import { useLocalite } from "../Services/LocaliteServices/localite.store";
 import { optionsLocalite, optionsType, optionsRegion } from "./Module";
 import { useBureaux } from "../Services/BureauServices/bureau.store";
 import { useMembres } from "../Services/MembreServices/membre.store";
+
+const Emplacement = ({ valueLocalite }) => {
+  if (valueLocalite == null) {
+    valueLocalite = {
+      longitude: -8.031512796878815,
+      latitude: 0,
+    };
+  }
+  const api2 = `https://maps.google.com/maps?q=${valueLocalite.latitude},${valueLocalite.longitude}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+  return (
+    <Box display={"flex"} justifyContent="center" margin={5}>
+      <iframe
+        width="100%"
+        height="500"
+        id="gmap_canvas"
+        src={api2}
+        frameborder="0"
+        zoom="0"
+        scrolling="no"
+        marginheight="0"
+        marginwidth="0"
+      ></iframe>
+    </Box>
+  );
+};
 
 const MembreRecherche = () => {
   const { pays } = usePays();
@@ -40,7 +62,8 @@ const MembreRecherche = () => {
   const [valueMembre, setValueMembre] = React.useState(null);
 
   const [openCollapse, setOpenCollapse] = React.useState(false);
-
+  //------------------------------------------------------------
+  const [bureauEmplacement, setBureauEmplacement] = React.useState(null);
   // ----------------------------------------------------------------
   // les useEffects
   useEffect(() => {
@@ -54,6 +77,11 @@ const MembreRecherche = () => {
         setValueBureau(
           bureaux.find((bureau) => bureau.idPays === valuePays.idPays)
         );
+        if (valueBureau == null) {
+          alert("aucun bureau existant");
+          alert("Modifier vos parametre de recherche");
+          return;
+        }
         const bureauSelect = bureaux.find(
           (bureau) => bureau.idPays === valuePays.idPays
         );
@@ -92,7 +120,7 @@ const MembreRecherche = () => {
     setValueLocalite(
       localites.filter((localite) => localite.idRegion === newValue.idRegion)
     );
-    if (valueType != null && valueType.libelleType == "National") {
+    if (valueType != null && valueType.libelleType === "National") {
       // setValueLocalite(valueLocalite);
       return valueLocalite;
     }
@@ -104,6 +132,7 @@ const MembreRecherche = () => {
     const bureauSelect = bureaux.find(
       (bureau) => bureau.idLocalite === newValue.idLocalite
     );
+    setBureauEmplacement(newValue);
     return bureauSelect;
   };
   //|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
@@ -124,6 +153,7 @@ const MembreRecherche = () => {
         ...option,
       };
     });
+  //------------------------------  ------------------------------
 
   return (
     // <AppLayout>
@@ -310,10 +340,11 @@ const MembreRecherche = () => {
               </CardContent>
             </Card>
           </CardContent>
-          <CardActions>
-            <Button size="small">Share</Button>
-            <Button size="small">Learn More</Button>
-          </CardActions>
+          {/* ---------------------------------------------------------------- */}
+          {bureauEmplacement && (
+            <Emplacement valueLocalite={bureauEmplacement} />
+          )}
+          {/* ---------------------------------------------------------------- */}
         </Card>
       </Collapse>
     </Box>

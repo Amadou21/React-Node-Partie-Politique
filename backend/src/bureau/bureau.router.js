@@ -20,6 +20,16 @@ const findById = async (req, res) => {
   const bureau = await service.findById(id);
   res.json(bureau);
 };
+const findByIdPays = async (req, res) => {
+  const id = +req.params.id;
+  const bureau = await service.findByIdPays(id);
+  res.json(bureau);
+};
+const findByIdLocalite = async (req, res) => {
+  const id = +req.params.id;
+  const bureau = await service.findByIdLocalite(id);
+  res.json(bureau);
+};
 
 const update = async (req, res) => {
   let bureau = req.body;
@@ -41,6 +51,8 @@ const addRoutes = (app) => {
   router.put("/:id", update);
   router.delete("/:id", destroy);
   router.get("/:id", findById);
+  router.get("/:idPays", findByIdPays);
+  router.get("/:idLocalite", findByIdLocalite);
   router.get("/", findAll);
 
   app.use(path, router);

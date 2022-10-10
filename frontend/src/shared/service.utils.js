@@ -10,6 +10,10 @@ const crud = (urlBase) => (entityName) => {
   return {
     findAll: () => fetch(entityUrl).then((res) => res.json()),
     findById: (id) => fetch(entityUrl + id).then((res) => res.json()),
+    findByIdPays: (idPays) =>
+      fetch(entityUrl + idPays).then((res) => res.json()),
+    findByIdLoaclite: (idLocalite) =>
+      fetch(entityUrl + idLocalite).then((res) => res.json()),
     destroy: async (id) => {
       await fetch(entityUrl + id, { method: "DELETE" });
       return true;
