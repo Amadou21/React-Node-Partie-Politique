@@ -7,13 +7,13 @@ import {
   Button,
   Box,
   Avatar,
+  CircularProgress,
 } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"; //useParams
-import AppLayout from "../Layout/AppLayout";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 //----------------------------------------------------------------
 import * as Yup from "yup";
-import { useFormik, Form, FormikProvider, Field } from "formik";
+import { useFormik, Form, FormikProvider } from "formik";
 import { LoadingButton } from "@mui/lab";
 import { motion } from "framer-motion";
 import {
@@ -21,10 +21,9 @@ import {
   findLogin,
 } from "../Membres/Services/UserServices/User.service";
 import { useSnackbar } from "notistack";
-// import { useAuthContext } from "../../Context/AuthContext";
-
 import { useUserById } from "../Membres/Services/UserServices/User.store"; //---------------------------
 import { useAuthContext } from "../../Context/AuthContext";
+// import { sleep } from "react-query/types/core/utils";
 
 let easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -37,40 +36,49 @@ const animate = {
   },
 };
 
+const UserDetailSchema = Yup.object().shape({
+  idUser: Yup.number().default(0),
+  prenom: Yup.string()
+    .min(2, "Trop court!")
+    .max(50, "Trop long!")
+    .required("Prenom obligatoire")
+    .default(""),
+  nom: Yup.string()
+    .min(2, "Trop court!")
+    .max(50, "Trop long!")
+    .required("Nom obligatoire")
+    .default(""),
+  login: Yup.string()
+    .email("Donnez un email valide")
+    .required("Email obligatoire")
+    .default(""),
+  photoUser: Yup.mixed()
+    .test("file", "You need to provide a file", (value) => {
+      if (value) return true;
+      return false;
+    })
+    .nullable()
+    .default(""),
+  motDePass: Yup.string().default(""),
+});
+
+const toBase64 = (arr) => {
+  arr = new Uint8Array(arr); // if it's an ArrayBuffer
+  return btoa(arr.reduce((data, byte) => data + String.fromCharCode(byte), ""));
+};
+
 const UserDetail = () => {
   // les hooks (useState, useNavigate etc...)
   const [file, setFile] = useState(null);
 
-  //----------------------------------------------------------------
-  const myUserPhoto = useRef(null);
-  //----------------------------------------------------------------
-
   const navigate = useNavigate();
   //les variables
-  // const { id } = useParams("id");
-  const { auth, idUser } = useAuthContext();
+  const { idUser } = useAuthContext();
   // const { idUser } = useAuthContext();
-  const { user, isLoading } = useUserById(Number(idUser));
-
-  //----------------------------------------------------------------
-  useEffect(() => {
-    if (!user) return;
-    if (!isLoading) {
-      const photo = myUserPhoto.current.value;
-      console.log("myUserPhoto", photo);
-    }
-  }, [isLoading]);
-  //----------------------------------------------------------------
+  const { user, isLoading } = useUserById(+idUser);
 
   const lastLogin = user?.login;
   const { enqueueSnackbar } = useSnackbar();
-
-  const toBase64 = (arr) => {
-    arr = new Uint8Array(arr); // if it's an ArrayBuffer
-    return btoa(
-      arr.reduce((data, byte) => data + String.fromCharCode(byte), "")
-    );
-  };
 
   const handleFile = (e) => {
     setFile(e.target.files[0]);
@@ -81,31 +89,8 @@ const UserDetail = () => {
     enqueueSnackbar(message + " ", { variant });
   };
 
-  const UserDetailSchema = Yup.object().shape({
-    idUser: Yup.number().default(idUser),
-    prenom: Yup.string()
-      .min(2, "Trop court!")
-      .max(50, "Trop long!")
-      .required("Prenom obligatoire")
-      .default(user?.prenom),
-    nom: Yup.string()
-      .min(2, "Trop court!")
-      .max(50, "Trop long!")
-      .required("Nom obligatoire")
-      .default(user?.nom),
-    login: Yup.string()
-      .email("Donnez un email valide")
-      .required("Email obligatoire")
-      .default(user?.login),
-    photoUser: Yup.mixed()
-      .test("file", "You need to provide a file", (value) => {
-        if (value) return true;
-        return false;
-      })
-      .nullable()
-      .default(user?.photoUser?.data),
-    motDePass: Yup.string().default(user?.motDePass),
-  });
+  const initialValues = UserDetailSchema.getDefaultFromShape();
+  console.log({ initialValues });
 
   const formik = useFormik({
     initialValues: UserDetailSchema.getDefaultFromShape(),
@@ -133,7 +118,29 @@ const UserDetail = () => {
     },
   });
 
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+  const {
+    errors,
+    touched,
+    handleSubmit,
+    isSubmitting,
+    getFieldProps,
+    setValues,
+    // setFieldValue,
+  } = formik;
+
+  useEffect(() => {
+    if (user) {
+      setValues(user);
+    }
+  }, [user]);
+
+  if (isLoading) {
+    return (
+      <Box display={"flex"} justifyContent="center" alignContent={"center"}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     // <AppLayout>
@@ -141,7 +148,10 @@ const UserDetail = () => {
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         {!isLoading && (
           <Card>
-            <CardHeader title="Detail du user" />
+            <CardHeader
+              title="Detail du user"
+              sx={{ justifyContent: "center" }}
+            />
             <Stack
               marginBottom={3}
               alignItems="center"
@@ -171,20 +181,12 @@ const UserDetail = () => {
                   hidden
                   name="photoUser"
                   accept="image/png, image/gif, image/jpeg, image/webp, image/jpg, image/heivc"
-                  ref={myUserPhoto}
+                  // ref={myUserPhoto}
                   onChange={handleFile}
                 />
               </Button>
             </Stack>
 
-            <Stack>
-              {myUserPhoto && (
-                <img
-                  src={`data:image/png;base64,${toBase64(myUserPhoto)}`}
-                  alt={"myUserPhoto"}
-                />
-              )}
-            </Stack>
             <CardContent>
               <Stack spacing={3}>
                 <Stack
@@ -198,12 +200,14 @@ const UserDetail = () => {
                     fullWidth
                     label="Prenom"
                     {...getFieldProps("prenom")}
+                    // value={user?.prenom}
                     error={Boolean(touched.prenom && errors.prenom)}
                     helperText={touched.prenom && errors.prenom}
                   />
                   <TextField
                     fullWidth
                     label="Nom"
+                    // defaultValue={user?.nom}
                     {...getFieldProps("nom")}
                     error={Boolean(touched.nom && errors.nom)}
                     helperText={touched.nom && errors.nom}
@@ -221,6 +225,7 @@ const UserDetail = () => {
                     autoComplete="username"
                     type="email"
                     label="Email"
+                    // defaultValue={user?.login}
                     {...getFieldProps("login")}
                     error={Boolean(touched.login && errors.login)}
                     helperText={touched.login && errors.login}

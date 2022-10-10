@@ -16,6 +16,16 @@ const findById = async (id) => {
   console.log({ bureau });
   return bureau;
 };
+const findByIdPays = async (idPays) => {
+  const bureau = await BureauModel.findOne({ where: { idPays } });
+  console.log({ bureau });
+  return bureau;
+};
+const findByIdLocalite = async (idLocalite) => {
+  const bureau = await BureauModel.findOne({ where: { idLocalite } });
+  console.log({ bureau });
+  return bureau;
+};
 
 const update = async (id, bureau) => {
   await BureauModel.update(bureau, { where: { idBureau: id } });
@@ -38,4 +48,6 @@ module.exports = {
   update,
   destroy,
   findByType,
+  findByIdLocalite,
+  findByIdPays,
 };

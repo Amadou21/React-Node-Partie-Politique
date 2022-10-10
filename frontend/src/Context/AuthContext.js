@@ -37,9 +37,9 @@ const AuthProvider = ({ children }) => {
       if (token.length > 0) {
         (async () => {
           const result = await hasAuthenticated(token);
-          console.log(" result ", result);
+          // console.log(" result ", result);
           if (result.ok) {
-            console.log(" result.ok ", result.ok);
+            // console.log(" result.ok ", result.ok);
             setAuth(true);
           } else setAuth(false);
         })();

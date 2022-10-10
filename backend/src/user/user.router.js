@@ -5,17 +5,7 @@ const fs = require("fs").promises;
 
 const multer = require("multer");
 
-var storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-    // cb(null, "http://localhost:3001/users/1");
-  },
-  filename: (req, file, cb) => {
-    const parts = file.originalname.split(".");
-    const extension = parts[parts.length - 1];
-    cb(null, `${Date.now()}.${extension}`);
-  },
-});
+const storage = multer.memoryStorage();
 
 const upload = multer({ storage });
 
@@ -50,13 +40,18 @@ const update = async (req, res) => {
   const id = +req.params.id;
   user = await service.update(id, user);
   res.json(user);*/
+  // console.log("req", req.files);
+
+  // for (file of req.files) {
+  //   console.log("file", file);
+  // }
   try {
     let user = req.body;
-    // console.log("user", user);
-    const file = req.file;
-    const photoUser = await fs.readFile(file.path);
+    const photoUser = req.file.buffer;
+    // const photoUser = await fs.readFile(file.path);
     const id = +req.params.id;
     user = { ...user, photoUser };
+    console.log("user", user);
     user = await service.update(id, user);
     res.json(user);
   } catch (e) {
