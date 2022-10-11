@@ -31,12 +31,10 @@ const settings = ["Profil", "Compte", "Tableau de bord", "Déconnexion"];
 const AppLayout = ({ children }) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  // const [userAuth, setUserAuth] = React.useState(false);
 
   const { auth, idUser } = useAuthContext();
 
-  const { user } = useUserById(Number(idUser));
-  // console.log("photo du user", user.photoUser);
+  const { user } = useUserById(+idUser);
   const navigate = useNavigate();
 
   //|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
@@ -257,7 +255,7 @@ const AppLayout = ({ children }) => {
           </Toolbar>
         </Container>
       </AppBar>
-      <Box sx={{ mt: 2, ml: 2, mr: 2, mb: 2 }}>{children}</Box>
+      <Box sx={{ margin: 2 }}>{children}</Box>
     </Box>
   );
 };

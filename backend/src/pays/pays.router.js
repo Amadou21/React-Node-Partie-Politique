@@ -5,7 +5,7 @@ const path = "/pays";
 
 const create = async (req, res) => {
   let pays = req.body;
-  console.log({ pays });
+  // console.log({ pays });
   pays = await service.create(pays);
   res.json(pays);
 };

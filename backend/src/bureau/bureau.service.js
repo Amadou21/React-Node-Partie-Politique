@@ -13,17 +13,17 @@ const findAll = async () => {
 
 const findById = async (id) => {
   const bureau = await BureauModel.findOne({ where: { idBureau: id } });
-  console.log({ bureau });
+  console.log("findbyid standard", { bureau });
   return bureau;
 };
 const findByIdPays = async (idPays) => {
   const bureau = await BureauModel.findOne({ where: { idPays } });
-  console.log({ bureau });
+  console.log("findbyid pays", { bureau });
   return bureau;
 };
 const findByIdLocalite = async (idLocalite) => {
   const bureau = await BureauModel.findOne({ where: { idLocalite } });
-  console.log({ bureau });
+  console.log("findbyid localite", { bureau });
   return bureau;
 };
 
@@ -37,7 +37,7 @@ const destroy = async (id) => {
 
 const findByType = async (type) => {
   const bureaux = await BureauModel.findAll({ where: { idType: type } });
-  console.log({ bureaux });
+  // console.log({ bureaux });
   return bureaux;
 };
 

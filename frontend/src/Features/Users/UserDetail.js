@@ -90,17 +90,17 @@ const UserDetail = () => {
   };
 
   const initialValues = UserDetailSchema.getDefaultFromShape();
-  console.log({ initialValues });
+  // console.log({ initialValues });
 
   const formik = useFormik({
     initialValues: UserDetailSchema.getDefaultFromShape(),
     validationSchema: UserDetailSchema,
     onSubmit: async (user) => {
-      console.log("userPhoto", user.photoUser);
+      // console.log("userPhoto", user.photoUser);
       if (file != null) {
         user.photoUser = file;
       }
-      console.log("userIdUser", user.idUser);
+      // console.log("userIdUser", user.idUser);
       const le_login = await findLogin(user.login);
       if (le_login.ok && user.login !== lastLogin) {
         handleClickVariant("Cet email existe déjà", "error");

@@ -13,7 +13,7 @@ const findAll = async () => {
 
 const findById = async (id) => {
   const localite = await LocaliteModel.findOne({ where: { idLocalite: id } });
-  console.log({ localite });
+  // console.log({ localite });
   return localite;
 };
 

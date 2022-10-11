@@ -12,7 +12,7 @@ const findAll = async () => {
 
 const findById = async (id) => {
   const region = await RegionModel.findOne({ where: { idRegion: id } });
-  console.log({ region });
+  // console.log({ region });
   return region;
 };
 

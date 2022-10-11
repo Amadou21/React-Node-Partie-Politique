@@ -5,7 +5,7 @@ const path = "/localites";
 
 const create = async (req, res) => {
   let localite = req.body;
-  console.log({ localite });
+  // console.log({ localite });
   localite = await service.create(localite);
   res.json(localite);
 };

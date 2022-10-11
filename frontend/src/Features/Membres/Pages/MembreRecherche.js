@@ -15,11 +15,23 @@ import {
 import { Avatar, Chip } from "@mui/material";
 import { usePays } from "../Services/PaysServices/pays.store";
 import { useType } from "../Services/TypeServices/type.store";
-import { useRegion } from "../Services/RegionServices/region.store";
-import { useLocalite } from "../Services/LocaliteServices/localite.store";
+import {
+  useRegion,
+  useRegionById,
+} from "../Services/RegionServices/region.store";
+import {
+  useLocalite,
+  useLocaliteById,
+} from "../Services/LocaliteServices/localite.store";
 import { optionsLocalite, optionsType, optionsRegion } from "./Module";
-import { useBureaux } from "../Services/BureauServices/bureau.store";
 import { useMembres } from "../Services/MembreServices/membre.store";
+import {
+  findByIdPays,
+  findByIdLocalite,
+} from "../Services/BureauServices/bureau.services";
+import { findById as findByIdLoaclite } from "../Services/LocaliteServices/localite.services";
+import { findById as findByIdRegion } from "../Services/RegionServices/region.services";
+import { findMembreByIdBureau } from "../Services/MembreServices/membre.service";
 
 const Emplacement = ({ valueLocalite }) => {
   if (valueLocalite == null) {
@@ -51,8 +63,7 @@ const MembreRecherche = () => {
   const { types } = useType();
   const { regions } = useRegion();
   const { localites, isLoading } = useLocalite();
-  const { bureaux } = useBureaux();
-  const { membres } = useMembres();
+  // const { membres } = useMembres();
 
   const [valuePays, setValuePays] = React.useState(null); //pays
   const [valueType, setValueType] = React.useState(null); //types
@@ -74,43 +85,52 @@ const MembreRecherche = () => {
         );
         setValueRegion(regionTrouver);
       } else {
-        setValueBureau(
-          bureaux.find((bureau) => bureau.idPays === valuePays.idPays)
-        );
-        if (valueBureau == null) {
-          alert("aucun bureau existant");
-          alert("Modifier vos parametre de recherche");
-          return;
-        }
-        const bureauSelect = bureaux.find(
-          (bureau) => bureau.idPays === valuePays.idPays
-        );
-        const localiteSelect = localites.find(
-          (localite) => localite.idLocalite === bureauSelect.idLocalite
-        );
-        const regionSelect = regions.find(
-          (region) => region.idRegion === localiteSelect.idRegion
-        );
+        /*--------------------------------------------------*/
+        (async () => {
+          // console.log("valuePays", valuePays);
+          // setValueBureau(
+          //   bureaux.find((bureau) => bureau.idPays === valuePays.idPays)
+          // );
+          const bureau = await findByIdPays(valuePays.idPays);
+          //-------------------------------
+          // setValueBureau(bureau);
+          //------------------------------
+          // alert(bureau);
+          if (!bureau) {
+            alert("aucun bureau existant");
+            alert("Modifier vos parametre de recherche");
+            return;
+          }
 
-        setValueLocalite([localiteSelect]);
-        setValueRegion([regionSelect]);
+          const localite = await findByIdLoaclite(bureau?.idLocalite);
+
+          const region = await findByIdRegion(localite.idRegion);
+
+          setValueLocalite([localite]);
+          setValueRegion([region]);
+        })();
       }
     }
   }, [valuePays, valueType]);
   //----------------------------------------------------------------
   useEffect(() => {
-    if (valueBureau != null) {
-      setValueMembre(
-        membres.filter((membre) => membre.idBureau === valueBureau.idBureau)
-      );
-      // console.log("value membre " + valueMembre);
+    if (valueBureau) {
+      (async () => {
+        const membres = await findMembreByIdBureau(valueBureau.idBureau);
+        console.log("les membres ", membres);
+        setValueMembre([membres]);
+      })();
     }
   }, [valueBureau]);
-
+  //----------------------------------------------------------------
+  useEffect(() => {
+    if (openCollapse) {
+      console.log("----------------ValueBureau", valueBureau);
+    }
+  }, [openCollapse, valueBureau]);
   //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
   const handleValuePays = (event, newValue) => {
     setValuePays(pays.find(({ idPays }) => idPays === newValue.idPays));
-    // console.log(valuePays);
   };
   //----------------------------------------------------------------
   const handleAutoCompleteLocalite = (event, newValue) => {
@@ -121,19 +141,22 @@ const MembreRecherche = () => {
       localites.filter((localite) => localite.idRegion === newValue.idRegion)
     );
     if (valueType != null && valueType.libelleType === "National") {
-      // setValueLocalite(valueLocalite);
       return valueLocalite;
     }
     return localiteTrouver;
   };
   //----------------------------------------------------------------
-  const handleBureau = (event, newValue) => {
+  const handleBureau = async (event, newValue) => {
     setOpenCollapse(true);
-    const bureauSelect = bureaux.find(
-      (bureau) => bureau.idLocalite === newValue.idLocalite
-    );
+    // const bureauSelect = bureaux.find(
+    //   (bureau) => bureau.idLocalite === newValue.idLocalite
+    // );
+    const bureau = await findByIdLocalite(newValue.idLocalite);
     setBureauEmplacement(newValue);
-    return bureauSelect;
+    // return bureauSelect;
+    console.log("le bureau", bureau);
+    setValueBureau(bureau);
+    return bureau;
   };
   //|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
 
@@ -232,7 +255,8 @@ const MembreRecherche = () => {
                   sx={{ minWidth: 300 }}
                   //----------------------------------------------------------------
                   onChange={(event, newValue) => {
-                    setValueBureau(handleBureau(event, newValue));
+                    handleBureau(event, newValue);
+                    // setValueBureau(handleBureau(event, newValue));
                   }}
                   //----------------------------------------------------------------
                   renderInput={(params) => (
@@ -255,7 +279,7 @@ const MembreRecherche = () => {
                 //   valueBureau?.photoBureau.data
                 // )}`} //url
                 image={`data:image/png;base64,${toBase64(
-                  valueBureau?.photoBureau.data
+                  valueBureau?.photoBureau?.data
                 )}`}
                 // j'ai beau cherché j'ai pas trouvé de difference entre src et image
                 // ça marche avec image et src même si tu mets les 2 ça marche

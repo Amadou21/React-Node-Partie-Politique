@@ -13,7 +13,7 @@ const findAll = async () => {
 
 const findById = async (id) => {
   const mandat = await MandatModel.findOne({ where: { idMandat: id } });
-  console.log({ mandat });
+  // console.log({ mandat });
   return mandat;
 };
 

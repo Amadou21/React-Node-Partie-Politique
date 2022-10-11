@@ -5,7 +5,7 @@ const path = "/type";
 
 const create = async (req, res) => {
   let type = req.body;
-  console.log({ type });
+  // console.log({ type });
   type = await service.create(type);
   res.json(type);
 };

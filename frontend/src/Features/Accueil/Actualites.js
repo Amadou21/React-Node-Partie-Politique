@@ -207,14 +207,14 @@ const Actualites = () => {
       .then((response) => response.json())
       .then((res) => {
         const articles = res.articles;
-        console.log(
-          "les articles --------------------------------------",
-          articles
-        );
+        // console.log(
+        //   "les articles --------------------------------------",
+        //   articles
+        // );
         setData(articles ? articles : data);
       });
   });
-  console.log("Data :", data);
+  // console.log("Data :", data);
   //const componentDidMount =
   return (
     // <AppLayout>
