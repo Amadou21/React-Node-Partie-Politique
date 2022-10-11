@@ -5,7 +5,7 @@ const path = "/mandats";
 
 const create = async (req, res) => {
   let mandat = req.body;
-  console.log({ mandat });
+  // console.log({ mandat });
   mandat = await service.create(mandat);
   res.json(mandat);
 };

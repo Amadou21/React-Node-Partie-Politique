@@ -55,16 +55,16 @@ const LoginForm = ({ handleClickOpen }) => {
     onSubmit: async (user) => {
       const response = await find(user);
       if (response.ok) {
-        console.log("la reponse est a ok :", response.ok);
+        // console.log("la reponse est a ok :", response.ok);
         const token = localStorage.getItem("token");
         const idUser = +localStorage.getItem("idUser");
         handleAuth(token, idUser);
         handleClickVariant("Vous etes connecté(e) avec succès", "success");
         navigate("/membre-actualites");
-        console.log("token : ", token);
-        console.log("id : ", idUser);
+        // console.log("token : ", token);
+        // console.log("id : ", idUser);
       } else {
-        console.log("la reponse nest pas ok :", response.ok);
+        // console.log("la reponse nest pas ok :", response.ok);
         handleClickOpen();
       }
       console.log("data :", response);

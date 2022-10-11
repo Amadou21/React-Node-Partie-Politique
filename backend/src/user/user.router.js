@@ -13,7 +13,7 @@ const path = "/users";
 
 const create = async (req, res) => {
   let user = req.body;
-  console.log({ user });
+  // console.log({ user });
   user = await service.create(user);
   if (user !== null) {
     let token = jwt.sign(user.idUser, "cHJvamV0LXJlYWN0");

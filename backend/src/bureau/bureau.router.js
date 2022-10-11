@@ -5,7 +5,7 @@ const path = "/bureaux";
 
 const create = async (req, res) => {
   let bureau = req.body;
-  console.log({ bureau });
+  // console.log({ bureau });
   bureau = await service.create(bureau);
   res.json(bureau);
 };

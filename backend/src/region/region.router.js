@@ -5,7 +5,7 @@ const path = "/regions";
 
 const create = async (req, res) => {
   let region = req.body;
-  console.log({ region });
+  // console.log({ region });
   region = await service.create(region);
   res.json(region);
 };

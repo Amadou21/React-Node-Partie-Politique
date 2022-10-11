@@ -12,7 +12,7 @@ const findAll = async () => {
 
 const findById = async (id) => {
   const poste = await PosteModel.findOne({ where: { idPoste: id } });
-  console.log({ poste });
+  // console.log({ poste });
   return poste;
 };
 

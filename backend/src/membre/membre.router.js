@@ -20,6 +20,15 @@ const findById = async (req, res) => {
   const membre = await service.findById(id);
   res.json(membre);
 };
+const findMembreByIdBureau = async (req, res) => {
+  const id = +req.params.id;
+  const membres = await service.findMembreByIdBureau(id);
+  console.log(
+    "----------------------------------------------backend membre",
+    membres
+  );
+  res.json(membres);
+};
 
 const update = async (req, res) => {
   let membre = req.body;
@@ -41,6 +50,7 @@ const addRoutes = (app) => {
   router.put("/:id", update);
   router.delete("/:id", destroy);
   router.get("/:id", findById);
+  router.get("/:idBureau", findMembreByIdBureau);
   router.get("/", findAll);
 
   app.use(path, router);

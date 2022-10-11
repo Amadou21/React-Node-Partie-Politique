@@ -15,6 +15,13 @@ const findById = async (id) => {
   console.log({ membre });
   return membre;
 };
+const findMembreByIdBureau = async (idBureau) => {
+  const membres = await MembreModel.findAll({ where: { idBureau } });
+  console.log("****************************************************", {
+    membres,
+  });
+  return membres;
+};
 
 const update = async (id, membre) => {
   await MembreModel.update(membre, { where: { idMembre: id } });
@@ -27,6 +34,7 @@ const destroy = async (id) => {
 module.exports = {
   findAll,
   findById,
+  findMembreByIdBureau,
   create,
   update,
   destroy,

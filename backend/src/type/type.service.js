@@ -12,7 +12,7 @@ const findAll = async () => {
 
 const findById = async (id) => {
   const type = await TypeModel.findOne({ where: { idType: id } });
-  console.log({ type });
+  // console.log({ type });
   return type;
 };
 

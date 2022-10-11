@@ -48,22 +48,10 @@ const animate = {
 const TableauDeBord = () => {
   // les hooks (useState, useNavigate etc...)
   const [file, setFile] = useState(null);
-  const myUserPhoto = useRef(null);
   const navigate = useNavigate();
   //les variables
-  // const { id } = useParams("id");
-  const { auth, idUser } = useAuthContext();
-  console.log("id de user", idUser);
-  // const { idUser } = useAuthContext();
+  const { idUser } = useAuthContext();
   const { user, isLoading } = useUserById(Number(idUser));
-  // const [ userLoad, setUserLoad ] = useState(user);
-  useEffect(() => {
-    if (!isLoading) {
-      const photo = myUserPhoto.current.value;
-      console.log("myUserPhoto", photo);
-      // setUserLoad(user);
-    }
-  }, [isLoading]);
 
   const lastLogin = user.login;
   const { enqueueSnackbar } = useSnackbar();
@@ -83,7 +71,6 @@ const TableauDeBord = () => {
     // variant could be success, error, warning, info, or default
     enqueueSnackbar(message + " ", { variant });
   };
-  // (() => delay(500))();
   const UserDetailSchema = Yup.object().shape({
     idUser: Yup.number().default(idUser),
     prenom: Yup.string()
@@ -115,12 +102,12 @@ const TableauDeBord = () => {
     initialValues: UserDetailSchema.getDefaultFromShape(),
     validationSchema: UserDetailSchema,
     onSubmit: async (user) => {
-      console.log("userPhoto", user.photoUser);
+      // console.log("userPhoto", user.photoUser);
       if (file != null) {
         user.photoUser = file;
-        console.log("userPhoto dans if", user.photoUser);
+        // console.log("userPhoto dans if", user.photoUser);
       }
-      console.log("userIdUser", user.idUser);
+      // console.log("userIdUser", user.idUser);
       const le_login = await findLogin(user.login);
       if (le_login.ok && user.login !== lastLogin) {
         handleClickVariant("Cet email existe déjà", "error");
@@ -176,15 +163,7 @@ const TableauDeBord = () => {
                   hidden
                   name="photoUser"
                   accept="image/png, image/gif, image/jpeg, image/webp, image/jpg, image/heivc"
-                  ref={myUserPhoto}
-                  // {...getFieldProps("photoUser")}
-                  // error={Boolean(touched.photoUser && errors.photoUser)}
-                  // helperText={touched.photoUser && errors.photoUser}
-                  // onChange={(e) => {
-                  //   Form.setFieldValue(field.name, e.target.files[0]);
-                  // }}
                   onChange={handleFile}
-                  // {...getFieldProps("photoUser")}
                 />
               </Button>
             </Stack>

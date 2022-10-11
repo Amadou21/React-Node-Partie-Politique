@@ -13,7 +13,7 @@ const findAll = async () => {
 
 const findById = async (id) => {
   const pays = await PaysModel.findOne({ where: { idPays: id } });
-  console.log({ pays });
+  // console.log({ pays });
   return pays;
 };
 
