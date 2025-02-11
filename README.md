@@ -23,7 +23,7 @@ Son objectif principal est de simuler les activités d'un parti politique, en pe
 
   - public/ : Fichiers statiques.
 
-  -src/ : Contient les composants et fonctionnalités principales.
+  - src/ : Contient les composants et fonctionnalités principales.
 
 ### 🚀 Installation et Configuration
 
